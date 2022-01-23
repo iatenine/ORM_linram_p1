@@ -28,7 +28,7 @@ public class TestPrimitiveFields {
     public static void test(
             tableDef tdef
     ){
-
+        System.out.println(tdef);
     }
 
     public static void main(String[] args) {
