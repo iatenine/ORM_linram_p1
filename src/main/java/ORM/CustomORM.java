@@ -5,7 +5,11 @@ import java.sql.ResultSet;
 
 public class CustomORM{
 
-    Connection conn = null;
+    public static void main(String[] args) {
+        // Required to run with coverage (remove this method later)
+    }
+
+    public static Connection conn = null;
 
     public static boolean connect(String endpoint, String username, String password) {
         return false;

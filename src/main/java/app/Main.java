@@ -1,11 +1,13 @@
 package app;
 
+import ORM.CustomORM;
 import Research.TestInheritance;
 
 import java.lang.reflect.Field;
 
 public class Main {
     public static void main(String[] args) {
+
         Field[] field = TestInheritance.class.getDeclaredFields();
 
         System.out.println(field[0].getName()); // Outputs b
