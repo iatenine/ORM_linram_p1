@@ -1,12 +1,39 @@
-package app;
+package Research;
 
-import Research.TestInheritance;
+import java.lang.reflect.*;
 
-import java.lang.reflect.Field;
+public class TestPrimitiveFields {
+    // Numerics
+    //byte, short, int, long
+    //double, float
+    private byte b;
+    short s[];
+    int i = 200;
+    long l = 40;
 
-public class Main {
+    double d = 40.3;
+    float f = 60.9f;
+
+    // Non-numeric
+    char c = 'd';
+    boolean on = true;
+
+    //Uninitialized
+    int uninitialized;
+    public static interface tableDef{
+        String tableName = null;
+        int id = -1;
+    }
+
+    public static void test(
+            tableDef tdef
+    ){
+
+    }
+
     public static void main(String[] args) {
-        Field[] field = TestInheritance.class.getDeclaredFields();
+        Field[] field = TestPrimitiveFields.class.getDeclaredFields();
+
         //given fields of
         // private byte b;
         // private short[] s;
@@ -20,5 +47,13 @@ public class Main {
         System.out.println(field[1].getType().toString()); // class [S
         System.out.println(field[1].getType().isArray()); // true
         System.out.println(field[1].getType().arrayType().toString().equals("short"));  //true
+    }
+
+    static public void foo(){
+        bar();
+    }
+
+    private static void bar(){
+
     }
 }
