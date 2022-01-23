@@ -1,4 +1,4 @@
 package Research;
 
-public class TestUserClasses {
+public class TestUserClasses{
 }

@@ -7,9 +7,6 @@ import java.lang.reflect.Field;
 public class Main {
     public static void main(String[] args) {
         Field[] field = TestInheritance.class.getDeclaredFields();
-        //given fields of
-        // private byte b;
-        // private short[] s;
 
         System.out.println(field[0].getName()); // Outputs b
         System.out.println(field[0].getType().toString().equals("byte")); // true
