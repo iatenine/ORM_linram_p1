@@ -1,8 +1,11 @@
 package ORM;
 
+import Logging.ORMLogger;
+
 import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CustomORM{
 
@@ -15,10 +18,14 @@ public class CustomORM{
 
             try{
                 String url = "jdbc:postgresql://" + endpoint + "/postgres";
+                ORMLogger.logger.info(url);
                 conn  = DriverManager.getConnection(url, username, password);
+
                 return true;
             } catch (SQLException e){
+
                 e.printStackTrace();
+                return false;
             }
 
         }
@@ -32,8 +39,8 @@ public class CustomORM{
             return null;
         }
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,\n"
-                    + Arrays.toString(colNames) + " " + Arrays.toString(dataTypes) + "\n"
+            String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,"
+                    + Arrays.toString(colNames) + " " + Arrays.toString(dataTypes) + " "
                     + "PRIMARY KEY(id))";
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
@@ -54,7 +61,7 @@ public class CustomORM{
     }
 
     // update row
-    public static ResultSet updateRow(String tableName, int id, String[] colNames, String[] values){
+    public static ResultSet updateRow(String tableName, int id, String[] colNames, Object[] values){
         return null;
     }
 
@@ -63,7 +70,10 @@ public class CustomORM{
 
         ResultSet rs = null;
         try {
+            //connect()
+            //conn.connect();
             String sql = "SELECT * FROM " + tableName + "WHERE id == '" + id + "';";
+
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             int count = 0;
@@ -81,6 +91,20 @@ public class CustomORM{
             e.printStackTrace();
         }
 
+
+
+
         return rs;
+    }
+
+
+    private static String buildTableString(String tableName, String[] colNames, Object[] dataTypes){
+
+
+        String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,";
+
+            sql += ");";
+
+        return null;
     }
 }

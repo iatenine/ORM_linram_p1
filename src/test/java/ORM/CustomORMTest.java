@@ -15,9 +15,9 @@ class CustomORMTest {
     @Test
     void connect() {
 
-        String enpdoint = "";
-        String username = "";
-        String password = "";
+        String enpdoint = "candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com";
+        String username = "candido";
+        String password = "Korraisbigdumb37";
 
         assertFalse(CustomORM.connect(
                 "Impossible Endpoint",
