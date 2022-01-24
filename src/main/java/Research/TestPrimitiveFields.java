@@ -20,16 +20,6 @@ public class TestPrimitiveFields {
 
     //Uninitialized
     int uninitialized;
-    public static interface tableDef{
-        String tableName = null;
-        int id = -1;
-    }
-
-    public static void test(
-            tableDef tdef
-    ){
-        System.out.println(tdef);
-    }
 
     public static void main(String[] args) {
         Field[] field = TestPrimitiveFields.class.getDeclaredFields();
@@ -44,7 +34,7 @@ public class TestPrimitiveFields {
         System.out.println(field[0].getType().isArray()); //false
 
         System.out.println(field[1].getName()); // s
-        System.out.println(field[1].getType().toString()); // class [S
+        System.out.println(field[1].getType()); // class [S
         System.out.println(field[1].getType().isArray()); // true
         System.out.println(field[1].getType().arrayType().toString().equals("short"));  //true
     }
