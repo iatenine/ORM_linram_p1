@@ -1,17 +1,47 @@
 package ORM;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+import javax.xml.transform.Result;
+import java.sql.*;
+import java.util.Arrays;
 
 public class CustomORM{
 
-    Connection conn = null;
+    static Connection conn = null;
 
     public static boolean connect(String endpoint, String username, String password) {
-        return false;
+
+
+        if(conn == null){
+
+            try{
+                String url = "jdbc:postgresql://" + endpoint + "/postgres";
+                conn  = DriverManager.getConnection(url, username, password);
+                return true;
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        }
+
+        return true;
     }
 
     public static String buildTable(String tableName, String[] colNames, Object[] dataTypes){
+
+        if(colNames.length != dataTypes.length){
+            return null;
+        }
+        try {
+            String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,\n"
+                    + Arrays.toString(colNames) + " " + Arrays.toString(dataTypes) + "\n"
+                    + "PRIMARY KEY(id))";
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
@@ -30,6 +60,27 @@ public class CustomORM{
 
     // delete row
     public static ResultSet deleteRow(String tableName, int id){
-        return null;
+
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM " + tableName + "WHERE id == '" + id + "';";
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            int count = 0;
+            while(rs.next()){
+                count++;
+            }
+            if(count == 1){
+                String query = "DELETE FROM " + tableName + "WHERE id == '" + id + "';";
+                stmt.execute(query);
+            } else {
+                return null;
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rs;
     }
 }
