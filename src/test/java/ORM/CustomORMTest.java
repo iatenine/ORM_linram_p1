@@ -59,7 +59,7 @@ class CustomORMTest {
         String newTable = CustomORM.buildTable(
                 "uneven array lengths",
                 new String[] {"test_col", "extra_col"},
-                new Object[] {});
+                new Class[] {});
         assertNull(newTable);
 
         String betterTable = CustomORM.buildTable(
@@ -171,9 +171,9 @@ class CustomORMTest {
                         "name",
                         "age"
                 },
-                new String[] {
-                        "Bobby",
-                        "12"
+                new Object[] {
+                        "bobby",
+                        Integer.valueOf(20)
                 });
         try {
             assertTrue(rs.next());

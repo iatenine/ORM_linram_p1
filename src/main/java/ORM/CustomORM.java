@@ -15,7 +15,7 @@ public class CustomORM{
         return false;
     }
 
-    public static String buildTable(String tableName, String[] colNames, Object[] dataTypes){
+    public static String buildTable(String tableName, String[] colNames, Class[] dataTypes){
         return null;
     }
 
@@ -28,7 +28,7 @@ public class CustomORM{
     }
 
     // update row
-    public static ResultSet updateRow(String tableName, int id, String[] colNames, String[] values){
+    public static ResultSet updateRow(String tableName, int id, String[] colNames, Object[] values){
         return null;
     }
 
