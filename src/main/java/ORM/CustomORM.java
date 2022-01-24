@@ -1,21 +1,54 @@
 package ORM;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+import Logging.ORMLogger;
+
+import javax.xml.transform.Result;
+import java.sql.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class CustomORM{
 
-    public static void main(String[] args) {
-        // Required to run with coverage (remove this method later)
-    }
-
-    public static Connection conn = null;
+    static Connection conn = null;
 
     public static boolean connect(String endpoint, String username, String password) {
-        return false;
+
+
+        if(conn == null){
+
+            try{
+                String url = "jdbc:postgresql://" + endpoint + "/postgres";
+                ORMLogger.logger.info(url);
+                conn  = DriverManager.getConnection(url, username, password);
+
+                return true;
+            } catch (SQLException e){
+
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
-    public static String buildTable(String tableName, String[] colNames, Class[] dataTypes){
+    public static String buildTable(String tableName, String[] colNames, Object[] dataTypes){
+
+        if(colNames.length != dataTypes.length){
+            return null;
+        }
+        try {
+            String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,"
+                    + Arrays.toString(colNames) + " " + Arrays.toString(dataTypes) + " "
+                    + "PRIMARY KEY(id))";
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
@@ -34,6 +67,44 @@ public class CustomORM{
 
     // delete row
     public static ResultSet deleteRow(String tableName, int id){
+
+        ResultSet rs = null;
+        try {
+            //connect()
+            //conn.connect();
+            String sql = "SELECT * FROM " + tableName + "WHERE id == '" + id + "';";
+
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            int count = 0;
+            while(rs.next()){
+                count++;
+            }
+            if(count == 1){
+                String query = "DELETE FROM " + tableName + "WHERE id == '" + id + "';";
+                stmt.execute(query);
+            } else {
+                return null;
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        return rs;
+    }
+
+
+    private static String buildTableString(String tableName, String[] colNames, Object[] dataTypes){
+
+
+        String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,";
+
+            sql += ");";
+
         return null;
     }
 }

@@ -1,0 +1,39 @@
+INFO  | 2022-01-24 11:13:28 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:13:28 | [main] ORM.CustomORM (CustomORM.java:26) - 08001
+ERROR | 2022-01-24 11:13:28 | [main] ORM.CustomORM (CustomORM.java:27) - [Ljava.lang.StackTraceElement;@39de3d36
+INFO  | 2022-01-24 11:13:28 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 11:13:28 | [main] ORM.CustomORM (CustomORM.java:26) - 08001
+ERROR | 2022-01-24 11:13:28 | [main] ORM.CustomORM (CustomORM.java:27) - [Ljava.lang.StackTraceElement;@77128536
+INFO  | 2022-01-24 11:16:14 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:16:14 | [main] ORM.CustomORM (CustomORM.java:26) - 08001
+ERROR | 2022-01-24 11:16:14 | [main] ORM.CustomORM (CustomORM.java:27) - [Ljava.lang.StackTraceElement;@484094a5
+INFO  | 2022-01-24 11:16:14 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 11:16:14 | [main] ORM.CustomORM (CustomORM.java:26) - 08001
+ERROR | 2022-01-24 11:16:14 | [main] ORM.CustomORM (CustomORM.java:27) - [Ljava.lang.StackTraceElement;@2c07545f
+INFO  | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:26) - java.sql.SQLException: No suitable driver found for jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:27) - 08001
+ERROR | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:28) - [Ljava.lang.StackTraceElement;@39de3d36
+INFO  | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:26) - java.sql.SQLException: No suitable driver found for jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:27) - 08001
+ERROR | 2022-01-24 11:18:49 | [main] ORM.CustomORM (CustomORM.java:28) - [Ljava.lang.StackTraceElement;@77128536
+INFO  | 2022-01-24 11:27:43 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:27:43 | [main] ORM.CustomORM (CustomORM.java:26) - org.postgresql.util.PSQLException: The connection attempt failed.
+INFO  | 2022-01-24 11:27:43 | [main] ORM.CustomORM (CustomORM.java:27) - 08001
+ERROR | 2022-01-24 11:27:43 | [main] ORM.CustomORM (CustomORM.java:28) - [Ljava.lang.StackTraceElement;@71812481
+INFO  | 2022-01-24 11:27:43 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 11:27:44 | [main] ORM.CustomORM (CustomORM.java:26) - org.postgresql.util.PSQLException: FATAL: password authentication failed for user "candido"
+INFO  | 2022-01-24 11:27:44 | [main] ORM.CustomORM (CustomORM.java:27) - 28P01
+ERROR | 2022-01-24 11:27:44 | [main] ORM.CustomORM (CustomORM.java:28) - [Ljava.lang.StackTraceElement;@7db82169
+INFO  | 2022-01-24 11:34:46 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:34:46 | [main] ORM.CustomORM (CustomORM.java:26) - org.postgresql.util.PSQLException: The connection attempt failed.
+INFO  | 2022-01-24 11:34:46 | [main] ORM.CustomORM (CustomORM.java:27) - 08001
+ERROR | 2022-01-24 11:34:46 | [main] ORM.CustomORM (CustomORM.java:28) - [Ljava.lang.StackTraceElement;@7ca20101
+INFO  | 2022-01-24 11:34:46 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 11:35:49 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:35:49 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 11:58:17 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 11:58:18 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-24 12:03:04 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-24 12:03:04 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
