@@ -1,11 +1,9 @@
 package ORM;
 
-import Logging.ORMLogger;
+import logging.ORMLogger;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class CustomORM{
 
