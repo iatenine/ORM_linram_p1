@@ -234,4 +234,38 @@ class CustomORMTest {
             ORMLogger.logger.error(i.getStackTrace());
         }
     }
+
+    @Test
+    void dropTable() {
+        String tableName = "DropTableTest";
+        String[] colNames = {
+                "name",
+                "age"
+        };
+        Class[] dataTypes = {
+                String.class,
+                Byte.class
+        };
+
+        String verifyName = CustomORM.buildTable(tableName, colNames, dataTypes);
+        assertEquals(tableName, verifyName);
+
+        int newId = CustomORM.addRow(
+                tableName,
+                "Hank",
+                20
+        );
+
+        CustomORM.dropTable(tableName);
+        ResultSet rs = CustomORM.getRow(tableName, newId, new String[] {"*"});
+        try {
+            // Ensure table has been dropped
+            assertFalse(rs.next());
+        } catch (SQLException e) {
+            ORMLogger.logger.info(e.getSQLState());
+            ORMLogger.logger.error(e.getStackTrace());
+        } catch (Exception i){
+            ORMLogger.logger.error(i.getStackTrace());
+        }
+    }
 }
