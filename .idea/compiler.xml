@@ -9,11 +9,5 @@
         <module name="ORM_linram_p1" />
       </profile>
     </annotationProcessing>
-<<<<<<< HEAD
-=======
-    <bytecodeTargetLevel>
-      <module name="ORM_linram_p1" target="17" />
-    </bytecodeTargetLevel>
->>>>>>> 10cf124b0b72a05dba0863ee86d307f976d2641d
   </component>
 </project>
