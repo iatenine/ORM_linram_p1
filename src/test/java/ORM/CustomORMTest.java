@@ -15,9 +15,9 @@ class CustomORMTest {
     @Test
     void connect() {
 
-        String enpdoint = "";
-        String username = "";
-        String password = "";
+        String enpdoint = "candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com";
+        String username = "candido";
+        String password = "Korraisbigdumb37";
 
         assertFalse(CustomORM.connect(
                 "Impossible Endpoint",
@@ -59,7 +59,7 @@ class CustomORMTest {
         String newTable = CustomORM.buildTable(
                 "uneven array lengths",
                 new String[] {"test_col", "extra_col"},
-                new Object[] {});
+                new Class[] {});
         assertNull(newTable);
 
         String betterTable = CustomORM.buildTable(
@@ -171,9 +171,9 @@ class CustomORMTest {
                         "name",
                         "age"
                 },
-                new String[] {
-                        "Bobby",
-                        "12"
+                new Object[] {
+                        "bobby",
+                        Integer.valueOf(20)
                 });
         try {
             assertTrue(rs.next());
