@@ -1,6 +1,7 @@
 package ORM;
 
 import logging.ORMLogger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
@@ -10,27 +11,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CustomORMTest {
 
+
+    @BeforeEach
+    void Prepare(){
+        assertTrue(CustomORM.connect());
+    }
+
     @Test
     void connect() {
-
-        String enpdoint = "candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com";
-        String username = "candido";
-        String password = "Korraisbigdumb37";
-
         assertFalse(CustomORM.connect(
                 "Impossible Endpoint",
                 "Fake username",
                 "bad password"
         ));
-        assertTrue(CustomORM.connect(enpdoint, username, password));
-
+        // Will not work without proper setup in resources/connections.properties
+        assertTrue(CustomORM.connect());
         // Ensure using new connections isn't blocked by Object state
         assertFalse(CustomORM.connect(
                 "Impossible Endpoint",
                 "Fake username",
                 "bad password"
         ));
-        assertTrue(CustomORM.connect(enpdoint, username, password));
     }
 
     @Test
