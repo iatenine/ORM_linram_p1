@@ -1,10 +1,8 @@
 package ORM;
 
-import Logging.ORMLogger;
-import org.apache.logging.log4j.core.appender.nosql.AbstractNoSqlConnection;
+import logging.ORMLogger;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,6 +17,14 @@ class CustomORMTest {
         String username = "candido";
         String password = "Korraisbigdumb37";
 
+        assertFalse(CustomORM.connect(
+                "Impossible Endpoint",
+                "Fake username",
+                "bad password"
+        ));
+        assertTrue(CustomORM.connect(enpdoint, username, password));
+
+        // Ensure using new connections isn't blocked by Object state
         assertFalse(CustomORM.connect(
                 "Impossible Endpoint",
                 "Fake username",

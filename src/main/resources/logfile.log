@@ -37,3 +37,7 @@ INFO  | 2022-01-24 11:58:17 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:po
 INFO  | 2022-01-24 11:58:18 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
 INFO  | 2022-01-24 12:03:04 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://Impossible Endpoint/postgres
 INFO  | 2022-01-24 12:03:04 | [main] ORM.CustomORM (CustomORM.java:21) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-25 11:28:06 | [main] ORM.CustomORM (CustomORM.java:19) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-25 11:28:06 | [main] ORM.CustomORM (CustomORM.java:19) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
+INFO  | 2022-01-25 11:31:15 | [main] ORM.CustomORM (CustomORM.java:19) - jdbc:postgresql://Impossible Endpoint/postgres
+INFO  | 2022-01-25 11:31:15 | [main] ORM.CustomORM (CustomORM.java:19) - jdbc:postgresql://candido2201-javareactent.cckxsca7svys.us-east-1.rds.amazonaws.com/postgres
