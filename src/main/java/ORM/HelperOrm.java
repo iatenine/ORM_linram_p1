@@ -1,8 +1,27 @@
 package ORM;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class HelperOrm {
 
-    public static String convertDataType(Class clazz){
+    @Contract(pure = true)
+    public static @NotNull String buildValues(int args, boolean provideDefault){
+        StringBuilder sb = new StringBuilder("(");
+        if(provideDefault)
+            sb.append("default, ");
+        for(int i = 0; i < args; i++){
+            sb.append("?");
+            if(i != args -1)
+                sb.append(", ");
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+
+    public static @Nullable String convertDataType(@NotNull Class clazz){
         String[] words = clazz.getName().split("\\.");
         String className = words[words.length-1];
         switch (className){

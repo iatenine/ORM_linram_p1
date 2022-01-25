@@ -32,4 +32,13 @@ class HelperOrmTest {
         assertEquals("BIGINT", lng);
         assertNull(invalid);
     }
+
+    @Test
+    void buildValues() {
+        String defaultStr = HelperOrm.buildValues(4, true);
+        String noDefaultStr = HelperOrm.buildValues(2, false);
+
+        assertEquals("(default, ?, ?, ?, ?)", defaultStr);
+        assertEquals("(?, ?)", noDefaultStr);
+    }
 }
