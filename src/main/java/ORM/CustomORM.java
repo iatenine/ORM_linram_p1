@@ -50,6 +50,10 @@ public class CustomORM{
         return null;
     }
 
+    public static void dropTable(String tableName){
+
+    };
+
     public static int addRow(String tableName, Object ...entries){
         return -1;
     }
