@@ -24,7 +24,7 @@ class HelperOrmTest {
         assertEquals("VARCHAR(75)", str);
         assertEquals("VARCHAR(1)", chr);
         assertEquals("NUMERIC(10, 2)", flt);
-        assertEquals("NUMERIC(15, 5)", dbl);
+        assertEquals("NUMERIC(15, 7)", dbl);
         assertEquals("BOOLEAN", bool);
         assertEquals("SMALLINT", byt);
         assertEquals("SMALLINT", shrt);
