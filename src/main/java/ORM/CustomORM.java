@@ -9,26 +9,25 @@ public class CustomORM{
 
     static Connection conn = null;
 
+    public static boolean connect(){
+        conn = JDBCConnection.getConnection();
+        return conn != null;
+    }
+
     public static boolean connect(String endpoint, String username, String password) {
-
-
-        if(conn == null){
-
             try{
                 String url = "jdbc:postgresql://" + endpoint + "/postgres";
-                ORMLogger.logger.info(url);
-                conn  = DriverManager.getConnection(url, username, password);
-
+                Connection testConn  = DriverManager.getConnection(url, username, password);
+                if(testConn instanceof Connection)
+                    conn =testConn;
                 return true;
             } catch (SQLException e){
-
-                e.printStackTrace();
+                ORMLogger.logger.error(e.getSQLState());
+                for (StackTraceElement elem : e.getStackTrace()) {
+                    ORMLogger.logger.info(elem);
+                }
                 return false;
             }
-
-        }
-
-        return true;
     }
 
     public static String buildTable(String tableName, String[] colNames, Object[] dataTypes){
@@ -37,7 +36,7 @@ public class CustomORM{
             return null;
         }
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,"
+            String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "( id serial not NULL,"
                     + Arrays.toString(colNames) + " " + Arrays.toString(dataTypes) + " "
                     + "PRIMARY KEY(id))";
             Statement stmt = conn.createStatement();
@@ -97,12 +96,8 @@ public class CustomORM{
 
 
     private static String buildTableString(String tableName, String[] colNames, Object[] dataTypes){
-
-
         String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,";
-
             sql += ");";
-
         return null;
     }
 }
