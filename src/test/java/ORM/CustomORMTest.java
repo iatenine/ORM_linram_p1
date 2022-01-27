@@ -44,21 +44,21 @@ class CustomORMTest {
         String[] colNames = {
                 "name",
                 "favorite_letter",
-                "net_worth",          // float assumes 2 decimals
-                "memorization_of_pi", // double should be more precise
-                "alive",
-                "age",
+                //"net_worth",          // float assumes 2 decimals
+                //"memorization_of_pi", // double should be more precise
+                //"alive",
+                //"age",
                 "high_score",
-                "computer memory",
+                "computer_memory",
                 "date_of_birth"
         };
         Class[] dataTypes = {
                 String.class,
                 Character.class,
-                Float.class,
-                Double.class,
-                Boolean.class,
-                Byte.class,
+               // Float.class,
+                //Double.class,
+               // Boolean.class,
+               // Byte.class,
                 Short.class,
                 Integer.class,
                 Long.class

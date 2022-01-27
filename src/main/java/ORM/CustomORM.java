@@ -3,7 +3,8 @@ package ORM;
 import logging.ORMLogger;
 
 import java.sql.*;
-import java.util.Arrays;
+
+import static ORM.HelperOrm.buildColumn;
 
 public class CustomORM{
 
@@ -30,26 +31,35 @@ public class CustomORM{
             }
     }
 
-    public static String buildTable(String tableName, String[] colNames, Object[] dataTypes){
+    public static String buildTable(String tableName, String[] colNames, Object[] dataTypes) {
 
-        if(colNames.length != dataTypes.length){
+        if (colNames.length != dataTypes.length) {
             return null;
         }
+        String str = buildColumn(colNames, (Class[]) dataTypes);
+
+
+        String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "( id serial primary key "
+                + str
+                + ")";
+        String sql2 = "Select * From " + tableName + ";";
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS " + tableName + "( id serial not NULL,"
-                    + Arrays.toString(colNames) + " " + Arrays.toString(dataTypes) + " "
-                    + "PRIMARY KEY(id))";
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
+            ResultSet rs;
+            PreparedStatement st = conn.prepareStatement(sql2);
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+            st.executeQuery();
+            return tableName;
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            System.out.println(sql);
         }
-
-        return null;
     }
 
-    public static void dropTable(String tableName){
+        public static void dropTable(String tableName){
 
     };
 
@@ -103,5 +113,9 @@ public class CustomORM{
         String sql = "CREATE TABLE IF NOT EXISTS" + tableName + "( id serial not NULL,";
             sql += ");";
         return null;
+    }
+
+    public static void main(String[] args) {
+        System.out.println();
     }
 }
