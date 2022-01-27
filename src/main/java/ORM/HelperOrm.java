@@ -1,23 +1,28 @@
 package ORM;
 
-import java.util.Arrays;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class HelperOrm {
 
-    String[] colNames = {
-            "name",
-            "favorite_letter",
-            "net_worth",          // float assumes 2 decimals
-            "memorization_of_pi", // double should be more precise
-            "alive",
-            "age",
-            "high_score",
-            "computer memory",
-            "date_of_birth"
-    };
+    @Contract(pure = true)
+    public static @NotNull String buildValues(int args, boolean provideDefault){
+        StringBuilder sb = new StringBuilder("(");
+        if(provideDefault)
+            sb.append("default, ");
+        for(int i = 0; i < args; i++){
+            sb.append("?");
+            if(i != args -1)
+                sb.append(", ");
+        }
+        sb.append(")");
+        return sb.toString();
+    }
 
 
-    public static String convertDataType(Class clazz){
+    public static @Nullable String convertDataType(@NotNull Class clazz){
+
         String[] words = clazz.getName().split("\\.");
         String className = words[words.length-1];
         switch (className){
