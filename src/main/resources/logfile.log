@@ -515,3 +515,11 @@ INFO  | 2022-01-25 14:38:21 | [main] ORM.CustomORM (CustomORM.java:27) - com.int
 INFO  | 2022-01-25 14:38:21 | [main] ORM.CustomORM (CustomORM.java:27) - com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
 INFO  | 2022-01-25 14:38:21 | [main] ORM.CustomORM (CustomORM.java:27) - com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:235)
 INFO  | 2022-01-25 14:38:21 | [main] ORM.CustomORM (CustomORM.java:27) - com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:54)
+ERROR | 2022-01-28 13:36:41 | [main] ORM.CustomORMTest (CustomORMTest.java:234) - [Ljava.lang.StackTraceElement;@f9d87b
+ERROR | 2022-01-28 13:37:37 | [main] ORM.CustomORMTest (CustomORMTest.java:234) - [Ljava.lang.StackTraceElement;@3e2943ab
+ERROR | 2022-01-28 13:38:28 | [main] ORM.CustomORMTest (CustomORMTest.java:234) - [Ljava.lang.StackTraceElement;@3e2943ab
+ERROR | 2022-01-28 13:43:13 | [main] ORM.CustomORMTest (CustomORMTest.java:234) - [Ljava.lang.StackTraceElement;@3e2943ab
+ERROR | 2022-01-28 13:52:48 | [main] ORM.CustomORMTest (CustomORMTest.java:234) - [Ljava.lang.StackTraceElement;@3e2943ab
+ERROR | 2022-01-28 14:00:14 | [main] ORM.CustomORMTest (CustomORMTest.java:234) - [Ljava.lang.StackTraceElement;@6175619b
+ERROR | 2022-01-28 14:05:02 | [main] ORM.CustomORMTest (CustomORMTest.java:268) - [Ljava.lang.StackTraceElement;@53e211ee
+ERROR | 2022-01-28 14:05:46 | [main] ORM.CustomORMTest (CustomORMTest.java:268) - [Ljava.lang.StackTraceElement;@226642a5
