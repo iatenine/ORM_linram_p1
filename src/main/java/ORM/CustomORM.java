@@ -60,10 +60,21 @@ public class CustomORM{
     }
 
         public static void dropTable(String tableName){
+        String sql = "Drop Table " + tableName + ";";
+        try{
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.execute();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
     };
 
     public static int addRow(String tableName, Object ...entries){
+
+
+
         return -1;
     }
 
@@ -81,9 +92,8 @@ public class CustomORM{
 
         ResultSet rs = null;
         try {
-            //connect()
-            //conn.connect();
-            String sql = "SELECT * FROM " + tableName + "WHERE id == '" + id + "';";
+
+            String sql = "SELECT * FROM " + tableName + " WHERE id = " + id + ";";
 
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
@@ -92,8 +102,9 @@ public class CustomORM{
                 count++;
             }
             if(count == 1){
-                String query = "DELETE FROM " + tableName + "WHERE id == '" + id + "';";
+                String query = "DELETE FROM " + tableName + " WHERE id = " + id + ";";
                 stmt.execute(query);
+                
             } else {
                 return null;
             }
@@ -101,9 +112,6 @@ public class CustomORM{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-
 
         return rs;
     }
