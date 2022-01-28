@@ -22,6 +22,7 @@ public class HelperOrm {
 
 
     public static @Nullable String convertDataType(@NotNull Class clazz){
+
         String[] words = clazz.getName().split("\\.");
         String className = words[words.length-1];
         switch (className){
@@ -53,6 +54,55 @@ public class HelperOrm {
                 return null;
             }
         }
+    }
+    public static void buildTypes(){
+
+    }
+    public static String buildColumn(String [] columns, Class[] type){
+        StringBuilder columnNames = new StringBuilder(",");
+        for(int i = 0; i < columns.length;i++){
+
+            if(i == columns.length-1){
+                columnNames.append(columns[i]+ " " + convertDataType(type[i]) );
+            } else {
+                columnNames.append(" "+ columns[i]+ " " + convertDataType(type[i]) + " , ");
+            }
+        }
+        String str = columnNames.toString();
+
+        System.out.println(str);
+
+        return str;
+    }
+
+    public static void main(String[] args) {
+        String[] colNames = {
+                "name",
+                "favorite_letter",
+                "net_worth",          // float assumes 2 decimals
+                "memorization_of_pi", // double should be more precise
+                "alive",
+                "age",
+                "high_score",
+                "computer memory",
+                "date_of_birth"
+        };
+        Class[] dataTypes = {
+                String.class,
+                Character.class,
+                Float.class,
+                Double.class,
+                Boolean.class,
+                Byte.class,
+                Short.class,
+                Integer.class,
+                Long.class
+        };
+
+        buildColumn(colNames, dataTypes);
+
+
+        //System.out.println(convertDataType(a));
     }
 
 }
