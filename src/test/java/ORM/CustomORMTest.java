@@ -141,9 +141,12 @@ class CustomORMTest {
             assertEquals("Hank", fetchedName1);
             assertEquals("Hank", fetchedName2);
         } catch (SQLException e) {
+            // SQLExceptions are ALWAYS a test failure
+            assertFalse(true);
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
         } catch (Exception i){
+            assertFalse(true);
             ORMLogger.logger.error(i.getStackTrace());
         }
 
@@ -190,9 +193,12 @@ class CustomORMTest {
             assertEquals("Bobby", newName);
             assertEquals(12, newAge);
         } catch (SQLException e) {
+            // SQLExceptions are ALWAYS a test failure
+            assertFalse(true);
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
         } catch (Exception i){
+            assertFalse(true);
             ORMLogger.logger.error(i.getStackTrace());
         }
     }
@@ -228,9 +234,12 @@ class CustomORMTest {
             rs = CustomORM.getRow(tableName, newId, new String[] {"*"});
             assertFalse(rs.next());
         } catch (SQLException e) {
+            // SQLExceptions are ALWAYS a test failure
+            assertFalse(true);
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
         } catch (Exception i){
+            assertFalse(true);
             ORMLogger.logger.error(i.getStackTrace());
         }
     }
@@ -262,9 +271,12 @@ class CustomORMTest {
             // Ensure table has been dropped
             assertFalse(rs.next());
         } catch (SQLException e) {
+            // SQLExceptions are ALWAYS a test failure
+            assertFalse(true);
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
         } catch (Exception i){
+            assertFalse(true);
             ORMLogger.logger.error(i.getStackTrace());
         }
     }
