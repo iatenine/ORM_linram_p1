@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class HelperOrm {
 
@@ -91,6 +92,7 @@ public class HelperOrm {
 
     static String buildColumn(HashMap<String, Class> columns){
         StringBuilder columnNames = new StringBuilder(",");
+        Pattern.compile(", \\)$");
         for(String colName : columns.keySet()){
             String sanitizedColName = sanitizeName(colName);
             columnNames.append(sanitizedColName + " " + convertDataType(columns.get(colName)) + ", ");

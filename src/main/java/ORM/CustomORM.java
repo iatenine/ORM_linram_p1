@@ -52,23 +52,15 @@ public class CustomORM{
     }
 
     public static int addRow(String tableName, Object ...entries){
-
-
         ResultSet rs;
         String sql = "Insert Into " + tableName + " Values " + buildValues(entries);
-
-        System.out.println(sql);
-
         rs = HelperOrm.executeQuery(conn, sql);
         try {
-
             rs.next();
-
             return rs.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return -1;
     }
 
@@ -78,14 +70,28 @@ public class CustomORM{
             sb.append(HelperOrm.sanitizeName(colName));
             sb.append(" ");
         }
-        sb.append(" FROM ");
+        sb.append("FROM ");
         sb.append(tableName);
         return executeQuery(conn, sb.toString());
     }
 
     // update row
     public static ResultSet updateRow(String tableName, int id, HashMap<String, Object> newEntries){
-        return null;
+        //UPDATE tableName SET colName=newValue WHERE id=target;
+        StringBuilder sb = new StringBuilder("UDPATE ");
+        sb.append(tableName);
+        sb.append(" SET ");
+        for(String colName : newEntries.keySet()){
+            // colName=newValue
+            sb.append(HelperOrm.sanitizeName(colName));
+            sb.append("=");
+            sb.append(newEntries.get(colName));
+            sb.append(" ");
+        }
+        sb.append("WHERE id=");
+        sb.append(id);
+        sb.append(" RETURNING *");
+        return HelperOrm.executeQuery(conn, sb.toString());
     }
 
     // delete row
