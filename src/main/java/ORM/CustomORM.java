@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import static ORM.HelperOrm.buildColumn;
+import static ORM.HelperOrm.executeQuery;
 
 public class CustomORM{
 
@@ -54,7 +55,14 @@ public class CustomORM{
     }
 
     public static ResultSet getRow(String tableName, int id, String[] colNames){
-        return null;
+        StringBuilder sb = new StringBuilder("SELECT ");
+        for(String colName : colNames){
+            sb.append(HelperOrm.sanitizeName(colName));
+            sb.append(" ");
+        }
+        sb.append(" FROM ");
+        sb.append(tableName);
+        return executeQuery(conn, sb.toString());
     }
 
     // update row
