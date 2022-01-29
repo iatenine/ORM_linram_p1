@@ -52,23 +52,15 @@ public class CustomORM{
     }
 
     public static int addRow(String tableName, Object ...entries){
-
-
         ResultSet rs;
         String sql = "Insert Into " + tableName + " Values " + buildValues(entries);
-
-        System.out.println(sql);
-
         rs = HelperOrm.executeQuery(conn, sql);
         try {
-
             rs.next();
-
             return rs.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return -1;
     }
 

@@ -103,7 +103,6 @@ class CustomORMTest {
             int fetchedAge = rs_full.getInt(2);
 
             String fetchedName2 = rs_partial.getString(1);
-            int fetchedNull = rs_partial.getInt(2);
             assertEquals(20, fetchedAge);
             assertEquals("Hank", fetchedName1);
             assertEquals("Hank", fetchedName2);
