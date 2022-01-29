@@ -1,20 +1,36 @@
 package ORM;
 
 import logging.ORMLogger;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomORMTest {
+    String tableName = "temp_table";
 
+    @BeforeAll
+    static void prepare(){
+        assertTrue(CustomORM.connect());
+    }
 
     @BeforeEach
-    void Prepare(){
-        assertTrue(CustomORM.connect());
+    void prepareTable(){
+        HashMap<String, Class> columns = new HashMap<>();
+        columns.put("name", String.class);
+        columns.put("age", Byte.class);
+        CustomORM.buildTable(tableName, columns);
+    }
+
+    @AfterEach
+    void cleanupDb(){
+        CustomORM.dropTable(tableName);
     }
 
     @Test
@@ -36,89 +52,37 @@ class CustomORMTest {
 
     @Test
     void buildTable() {
-        String tableName = "test_table";
-        // String, character
-        // float, double
-        // boolean
-        // byte, short, int, long
-        String[] colNames = {
-                "name",
-                "favorite_letter",
-                //"net_worth",          // float assumes 2 decimals
-                //"memorization_of_pi", // double should be more precise
-                //"alive",
-                //"age",
-                "high_score",
-                "computer_memory",
-                "date_of_birth"
-        };
-        Class[] dataTypes = {
-                String.class,
-                Character.class,
-               // Float.class,
-                //Double.class,
-               // Boolean.class,
-               // Byte.class,
-                Short.class,
-                Integer.class,
-                Long.class
-        };
-        String newTable = CustomORM.buildTable(
-                "uneven array lengths",
-                new String[] {"test_col", "extra_col"},
-                new Class[] {});
-        assertNull(newTable);
+        HashMap<String, Class> columns = new HashMap<>();
+        columns.put("name", String.class);
+        columns.put("favorite_letter", Character.class);
+        columns.put("net_worth", Float.class);
+        columns.put("Memorization of Pi", Double.class);
+        columns.put("alive", Byte.class);
+        columns.put("high score", Short.class);
+        columns.put("computer memory", Integer.class);
+        columns.put("date_of_birth", Long.class);
 
         String betterTable = CustomORM.buildTable(
                 tableName,
-                colNames,
-                dataTypes
+                columns
         );
         assertEquals(tableName, betterTable);
     }
 
     @Test
     void addRow() {
-        String tableName = "AddRowTest";
-        String[] colNames = {
-                "name",
-                "age"
-        };
-        Class[] dataTypes = {
-                String.class,
-                Byte.class
-        };
-
-        String verifyName = CustomORM.buildTable(tableName, colNames, dataTypes);
-
-        assertEquals(tableName, verifyName);
-
         int newId = CustomORM.addRow(
                 tableName,
                 "Hank",
                 20
         );
 
-        assertNotNull(newId);
         assertInstanceOf(Integer.class, newId);
         assertTrue(newId > 0);
     }
 
     @Test
     void getRow() {
-        String tableName = "GetRowTest";
-        String[] colNames = {
-                "name",
-                "age"
-        };
-        Class[] dataTypes = {
-                String.class,
-                Byte.class
-        };
-
-        String verifyName = CustomORM.buildTable(tableName, colNames, dataTypes);
-        assertEquals(tableName, verifyName);
-
         int newId = CustomORM.addRow(
                 tableName,
                 "Hank",
@@ -130,6 +94,8 @@ class CustomORMTest {
 
         try {
             // Place both ResultSets on their first response
+            assertNotNull(rs_full);
+            assertNotNull(rs_partial);
             assertTrue(rs_full.next());
             assertTrue(rs_partial.next());
             String fetchedName1 = rs_full.getString(1);
@@ -141,9 +107,12 @@ class CustomORMTest {
             assertEquals("Hank", fetchedName1);
             assertEquals("Hank", fetchedName2);
         } catch (SQLException e) {
+            // SQLExceptions are ALWAYS a test failure
+            fail();
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
         } catch (Exception i){
+            fail();
             ORMLogger.logger.error(i.getStackTrace());
         }
 
@@ -152,36 +121,22 @@ class CustomORMTest {
 
     @Test
     void updateRow() {
-        String tableName = "UpdateRowTest";
-        String[] colNames = {
-                "name",
-                "age"
-        };
-        Class[] dataTypes = {
-                String.class,
-                Byte.class
-        };
-
-        String verifyName = CustomORM.buildTable(tableName, colNames, dataTypes);
-        assertEquals(tableName, verifyName);
-
         int newId = CustomORM.addRow(
                 tableName,
                 "Hank",
                 20
         );
 
+        HashMap<String, Object> newCols = new HashMap<>();
+
+        newCols.put("name", "bobby");
+        newCols.put("age", Integer.valueOf(12));
+
         ResultSet rs = CustomORM.updateRow(
                 tableName,
                 newId,
-                new String[] {
-                        "name",
-                        "age"
-                },
-                new Object[] {
-                        "bobby",
-                        Integer.valueOf(20)
-                });
+                newCols
+        );
         try {
             assertTrue(rs.next());
             String newName = rs.getString(1);
@@ -190,32 +145,22 @@ class CustomORMTest {
             assertEquals("Bobby", newName);
             assertEquals(12, newAge);
         } catch (SQLException e) {
+            // SQLExceptions are ALWAYS a test failure
+            fail();
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
         } catch (Exception i){
+            fail();
             ORMLogger.logger.error(i.getStackTrace());
         }
     }
 
     @Test
     void deleteRow() {
-        String tableName = "DeleteRowTest";
-        String[] colNames = {
-                "name",
-                "age"
-        };
-        Class[] dataTypes = {
-                String.class,
-                Byte.class
-        };
-
-        String verifyName = CustomORM.buildTable(tableName, colNames, dataTypes);
-        assertEquals(tableName, verifyName);
-
         int newId = CustomORM.addRow(
                 tableName,
                 "Hank",
-                20
+                45
         );
 
         ResultSet rs = CustomORM.deleteRow(tableName, newId);
@@ -224,10 +169,16 @@ class CustomORMTest {
             String deletedName = rs.getString(1);
             int deletedAge = rs.getInt(2);
 
+            assertEquals("Hank", deletedName);
+            assertEquals(45, deletedAge);
+
             // Ensure deletion occurred
             rs = CustomORM.getRow(tableName, newId, new String[] {"*"});
+            assertNotNull(rs);
             assertFalse(rs.next());
         } catch (SQLException e) {
+            // SQLExceptions are ALWAYS a test failure
+            fail();
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
         } catch (Exception i){
@@ -237,35 +188,13 @@ class CustomORMTest {
 
     @Test
     void dropTable() {
-        String tableName = "DropTableTest";
-        String[] colNames = {
-                "name",
-                "age"
-        };
-        Class[] dataTypes = {
-                String.class,
-                Byte.class
-        };
-
-        String verifyName = CustomORM.buildTable(tableName, colNames, dataTypes);
-        assertEquals(tableName, verifyName);
-
         int newId = CustomORM.addRow(
                 tableName,
-                "Hank",
-                20
+                "Cotton",
+                85
         );
 
         CustomORM.dropTable(tableName);
-        ResultSet rs = CustomORM.getRow(tableName, newId, new String[] {"*"});
-        try {
-            // Ensure table has been dropped
-            assertFalse(rs.next());
-        } catch (SQLException e) {
-            ORMLogger.logger.info(e.getSQLState());
-            ORMLogger.logger.error(e.getStackTrace());
-        } catch (Exception i){
-            ORMLogger.logger.error(i.getStackTrace());
-        }
+        assertNull(CustomORM.getRow(tableName, newId, new String[] {"*"}));            // Ensure table has been dropped
     }
 }

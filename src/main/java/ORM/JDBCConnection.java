@@ -26,10 +26,4 @@ public class JDBCConnection {
 
         return conn;
     }
-
-    public static void foo(){}
-
-    public static void main(String[] args) {
-        Connection c = getConnection();
-    }
 }

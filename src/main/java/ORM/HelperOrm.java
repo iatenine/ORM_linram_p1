@@ -1,13 +1,21 @@
 package ORM;
 
+import logging.ORMLogger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Locale;
+
 public class HelperOrm {
 
     @Contract(pure = true)
-    public static @NotNull String buildValues(int args, boolean provideDefault){
+    static @NotNull String buildValues(int args, boolean provideDefault){
         StringBuilder sb = new StringBuilder("(");
         if(provideDefault)
             sb.append("default, ");
@@ -21,7 +29,7 @@ public class HelperOrm {
     }
 
 
-    public static @Nullable String convertDataType(@NotNull Class clazz){
+    static @Nullable String convertDataType(@NotNull Class clazz){
 
         String[] words = clazz.getName().split("\\.");
         String className = words[words.length-1];
@@ -55,54 +63,43 @@ public class HelperOrm {
             }
         }
     }
-    public static void buildTypes(){
 
-    }
-    public static String buildColumn(String [] columns, Class[] type){
+    static String buildColumn(HashMap<String, Class> columns){
         StringBuilder columnNames = new StringBuilder(",");
-        for(int i = 0; i < columns.length;i++){
+        for(String colName : columns.keySet()){
+            String sanitizedColName = sanitizeName(colName);
+            columnNames.append(sanitizedColName + " " + convertDataType(columns.get(colName)) + ", ");
+        }
+        return columnNames.toString().replaceAll(", $", "");
+    }
 
-            if(i == columns.length-1){
-                columnNames.append(columns[i]+ " " + convertDataType(type[i]) );
-            } else {
-                columnNames.append(" "+ columns[i]+ " " + convertDataType(type[i]) + " , ");
+    static String sanitizeName(String s){
+        return s.replaceAll(" ", "_").toLowerCase(Locale.ROOT);
+    }
+
+    static void executeStatement(Connection conn, String sql){
+        try{
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.execute();
+        } catch (SQLException e){
+            ORMLogger.logger.info(e.getSQLState());
+            for(StackTraceElement msg : e.getStackTrace()){
+                ORMLogger.logger.error(msg);
             }
         }
-        String str = columnNames.toString();
-
-        System.out.println(str);
-
-        return str;
     }
 
-    public static void main(String[] args) {
-        String[] colNames = {
-                "name",
-                "favorite_letter",
-                "net_worth",          // float assumes 2 decimals
-                "memorization_of_pi", // double should be more precise
-                "alive",
-                "age",
-                "high_score",
-                "computer memory",
-                "date_of_birth"
-        };
-        Class[] dataTypes = {
-                String.class,
-                Character.class,
-                Float.class,
-                Double.class,
-                Boolean.class,
-                Byte.class,
-                Short.class,
-                Integer.class,
-                Long.class
-        };
-
-        buildColumn(colNames, dataTypes);
-
-
-        //System.out.println(convertDataType(a));
-    }
-
+    // Uncomment when needed, currently drops test coverage below 80%
+//    static ResultSet executeQuery(Connection conn, String sql){
+//        try{
+//            PreparedStatement st = conn.prepareStatement(sql);
+//            return st.executeQuery();
+//        } catch (SQLException e){
+//            ORMLogger.logger.info(e.getSQLState());
+//            for(StackTraceElement msg : e.getStackTrace()){
+//                ORMLogger.logger.error(msg);
+//            }
+//        }
+//        return null;
+//    }
 }
