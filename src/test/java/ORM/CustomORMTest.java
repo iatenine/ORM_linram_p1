@@ -13,6 +13,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomORMTest {
+
     String tableName = "temp_table";
 
     @BeforeAll

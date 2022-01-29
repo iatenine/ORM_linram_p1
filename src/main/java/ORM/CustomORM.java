@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import static ORM.HelperOrm.buildColumn;
 import static ORM.HelperOrm.executeQuery;
+import static ORM.HelperOrm.buildValues;
 
 public class CustomORM{
 
@@ -51,6 +52,23 @@ public class CustomORM{
     }
 
     public static int addRow(String tableName, Object ...entries){
+
+
+        ResultSet rs;
+        String sql = "Insert Into " + tableName + " Values " + buildValues(entries);
+
+        System.out.println(sql);
+
+        rs = HelperOrm.executeQuery(conn, sql);
+        try {
+
+            rs.next();
+
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return -1;
     }
 

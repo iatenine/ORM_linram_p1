@@ -65,6 +65,31 @@ public class HelperOrm {
         }
     }
 
+    static String buildValues(Object ...entries){
+
+        StringBuilder values = new StringBuilder("( default, ");
+        for(Object valName : entries){
+            Class clazz = valName.getClass();
+            String[] words = clazz.getName().split("\\.");
+            String className = words[words.length-1];
+            if("String".equals(className) || "Character".equals(className)){
+                values.append("'" + valName + "', "  );
+            } else {
+                values.append(valName + ", "  );
+            }
+
+
+
+        }
+
+        String temp = values.toString().replaceAll(", $", "");
+
+        return temp + ") RETURNING id";
+
+
+    }
+
+
     static String buildColumn(HashMap<String, Class> columns){
         StringBuilder columnNames = new StringBuilder(",");
         Pattern.compile(", \\)$");
@@ -93,15 +118,17 @@ public class HelperOrm {
 
     // Uncomment when needed, currently drops test coverage below 80%
     static ResultSet executeQuery(Connection conn, String sql){
+        ResultSet rs = null;
         try{
             PreparedStatement st = conn.prepareStatement(sql);
-            return st.executeQuery();
+            rs = st.executeQuery();
         } catch (SQLException e){
             ORMLogger.logger.info(e.getSQLState());
             for(StackTraceElement msg : e.getStackTrace()){
                 ORMLogger.logger.error(msg);
             }
         }
-        return null;
+
+        return rs;
     }
 }
