@@ -90,16 +90,16 @@ public class HelperOrm {
     }
 
     // Uncomment when needed, currently drops test coverage below 80%
-//    static ResultSet executeQuery(Connection conn, String sql){
-//        try{
-//            PreparedStatement st = conn.prepareStatement(sql);
-//            return st.executeQuery();
-//        } catch (SQLException e){
-//            ORMLogger.logger.info(e.getSQLState());
-//            for(StackTraceElement msg : e.getStackTrace()){
-//                ORMLogger.logger.error(msg);
-//            }
-//        }
-//        return null;
-//    }
+    static ResultSet executeQuery(Connection conn, String sql){
+        try{
+            PreparedStatement st = conn.prepareStatement(sql);
+            return st.executeQuery();
+        } catch (SQLException e){
+            ORMLogger.logger.info(e.getSQLState());
+            for(StackTraceElement msg : e.getStackTrace()){
+                ORMLogger.logger.error(msg);
+            }
+        }
+        return null;
+    }
 }

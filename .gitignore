@@ -5,3 +5,4 @@
 /src/main/resources/connection.properties
 /src/main/resources/*.properties
 
+/src/main/resources/logfile.log
