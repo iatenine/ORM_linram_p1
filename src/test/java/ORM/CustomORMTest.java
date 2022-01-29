@@ -130,13 +130,14 @@ class CustomORMTest {
         HashMap<String, Object> newCols = new HashMap<>();
 
         newCols.put("name", "bobby");
-        newCols.put("age", Integer.valueOf(12));
+        newCols.put("age", 12);
 
         ResultSet rs = CustomORM.updateRow(
                 tableName,
                 newId,
                 newCols
         );
+        assertNotNull(rs);
         try {
             assertTrue(rs.next());
             String newName = rs.getString(1);
@@ -149,9 +150,9 @@ class CustomORMTest {
             fail();
             ORMLogger.logger.info(e.getSQLState());
             ORMLogger.logger.error(e.getStackTrace());
-        } catch (Exception i){
-            fail();
-            ORMLogger.logger.error(i.getStackTrace());
+        } catch (NullPointerException e){
+            ORMLogger.logger.info(e.getStackTrace());
+            ORMLogger.logger.error("Null Pointer Exception");
         }
     }
 
@@ -164,6 +165,7 @@ class CustomORMTest {
         );
 
         ResultSet rs = CustomORM.deleteRow(tableName, newId);
+        assertNotNull(rs);
         try {
             assertTrue(rs.next());
             String deletedName = rs.getString(1);
@@ -193,7 +195,7 @@ class CustomORMTest {
                 "Cotton",
                 85
         );
-
+        assertNotEquals(-1, newId);
         CustomORM.dropTable(tableName);
         assertNull(CustomORM.getRow(tableName, newId, new String[] {"*"}));            // Ensure table has been dropped
     }
