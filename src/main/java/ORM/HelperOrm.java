@@ -66,36 +66,31 @@ public class HelperOrm {
     }
 
     static String buildValues(Object ...entries){
-
         StringBuilder values = new StringBuilder("( default, ");
         for(Object valName : entries){
-            Class clazz = valName.getClass();
-            String[] words = clazz.getName().split("\\.");
-            String className = words[words.length-1];
-            if("String".equals(className) || "Character".equals(className)){
-                values.append("'" + valName + "', "  );
-            } else {
-                values.append(valName + ", "  );
-            }
-
-
-
+            values.append(formatValues(valName));
+            values.append(", ");
         }
+        values.setLength(values.length() - 2);
+        values.append(") RETURNING id");
+        return values.toString();
+    }
 
-        String temp = values.toString().replaceAll(", $", "");
-
-        return temp + ") RETURNING id";
-
-
+    static Object formatValues(Object obj){
+        String[] classNameArr = obj.getClass().getName().split("\\.");
+        String className = classNameArr[classNameArr.length-1];
+        if("String".equals(className) || "Character".equals(className)) {
+            return   "'" + obj + "'";
+        }
+        return obj;
     }
 
 
     static String buildColumn(HashMap<String, Class> columns){
         StringBuilder columnNames = new StringBuilder(",");
-        Pattern.compile(", \\)$");
         for(String colName : columns.keySet()){
             String sanitizedColName = sanitizeName(colName);
-            columnNames.append(sanitizedColName + " " + convertDataType(columns.get(colName)) + ", ");
+            columnNames.append(sanitizedColName).append(" ").append(convertDataType(columns.get(colName))).append(", ");
         }
         return columnNames.toString().replaceAll(", $", "");
     }

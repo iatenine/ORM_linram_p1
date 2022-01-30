@@ -77,18 +77,18 @@ public class CustomORM{
 
     // update row
     public static ResultSet updateRow(String tableName, int id, HashMap<String, Object> newEntries){
-        //UPDATE tableName SET colName=newValue WHERE id=target;
-        StringBuilder sb = new StringBuilder("UDPATE ");
+        //UPDATE tableName SET colName=newValue WHERE id=target RETURNING *;
+        StringBuilder sb = new StringBuilder("UPDATE ");
         sb.append(tableName);
         sb.append(" SET ");
         for(String colName : newEntries.keySet()){
-            // colName=newValue
             sb.append(HelperOrm.sanitizeName(colName));
             sb.append("=");
-            sb.append(newEntries.get(colName));
-            sb.append(" ");
+            sb.append(HelperOrm.formatValues(newEntries.get(colName)));
+            sb.append(", ");
         }
-        sb.append("WHERE id=");
+        sb.setLength(sb.length() - 2);
+        sb.append(" WHERE id=");
         sb.append(id);
         sb.append(" RETURNING *");
         return HelperOrm.executeQuery(conn, sb.toString());
@@ -107,8 +107,8 @@ public class CustomORM{
                 count++;
             }
             if(count == 1){
-                String query = "DELETE FROM " + tableName + " WHERE id = " + id + ";";
-                stmt.execute(query);
+                String query = "DELETE FROM " + tableName + " WHERE id = " + id + " RETURNING *;";
+                return HelperOrm.executeQuery(conn, query);
                 
             } else {
                 return null;
