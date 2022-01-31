@@ -5,11 +5,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.function.BooleanSupplier;
 
+import static ORM.CustomORM.conn;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomORMTest {
@@ -199,4 +203,17 @@ class CustomORMTest {
         CustomORM.dropTable(tableName);
         assertNull(CustomORM.getRow(tableName, newId, new String[] {"*"}));            // Ensure table has been dropped
     }
+
+    @Test
+    void executeStatementTest(){
+        //Boolean check = false;
+    }
+
+    @Test
+    void executeQueryTest(){
+
+       // String test = "Select * From Test_Table";
+       // ResultSet rs = HelperOrm.executeQuery(conn, test);
+    }
+
 }

@@ -60,8 +60,9 @@ public class CustomORM{
             return rs.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
+
     }
 
     public static ResultSet getRow(String tableName, int id, String[] colNames){
@@ -96,27 +97,22 @@ public class CustomORM{
 
     // delete row
     public static ResultSet deleteRow(String tableName, int id){
-        ResultSet rs = null;
-        try {
-            String sql = "SELECT * FROM " + tableName + " WHERE id = " + id + ";";
 
-            Statement stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
-            int count = 0;
-            while(rs.next()){
-                count++;
-            }
-            if(count == 1){
-                String query = "DELETE FROM " + tableName + " WHERE id = " + id + ";";
-                stmt.execute(query);
-                
-            } else {
+        ResultSet rs1;
+        String sql = "SELECT * FROM " + tableName + " WHERE id = " + id + ";";
+
+        ResultSet rs = HelperOrm.executeQuery(conn, sql);
+            try {
+                if (rs.next()){
+                    String query = "DELETE FROM " + tableName + " WHERE id = " + id + ";";
+                    rs1 = HelperOrm.executeQuery(conn, query);
+                } else {
+                    return null;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
                 return null;
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return rs;
+        return rs1;
     }
 }
