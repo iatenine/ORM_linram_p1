@@ -76,6 +76,18 @@ public class HelperOrm {
         return values.toString();
     }
 
+    @NotNull
+    static String selectStatementBuilder(String tableName, String[] colNames) {
+        StringBuilder sb = new StringBuilder("SELECT ");
+        for(String colName : colNames){
+            sb.append(HelperOrm.sanitizeName(colName));
+            sb.append(" ");
+        }
+        sb.append("FROM ");
+        sb.append(tableName);
+        return sb.toString();
+    }
+
     static Object formatValues(Object obj){
         String[] classNameArr = obj.getClass().getName().split("\\.");
         String className = classNameArr[classNameArr.length-1];

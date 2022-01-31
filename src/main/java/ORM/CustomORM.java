@@ -1,6 +1,7 @@
 package ORM;
 
 import logging.ORMLogger;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -70,15 +71,13 @@ public class CustomORM{
     }
 
     public static ResultSet getRow(String tableName, int id, String[] colNames){
-        StringBuilder sb = new StringBuilder("SELECT ");
-        for(String colName : colNames){
-            sb.append(HelperOrm.sanitizeName(colName));
-            sb.append(" ");
-        }
-        sb.append("FROM ");
-        sb.append(tableName);
-        sb.append(" WHERE id=").append(id);
-        return executeQuery(conn, sb.toString());
+        String sql = HelperOrm.selectStatementBuilder(tableName, colNames) + " WHERE id=" + id;
+        return executeQuery(conn, sql);
+    }
+
+    public static ResultSet getRows(String tableName, String[] colNames){
+        String sql = HelperOrm.selectStatementBuilder(tableName, colNames);
+        return executeQuery(conn, sql.toString());
     }
 
     // update row
