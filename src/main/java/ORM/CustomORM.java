@@ -60,8 +60,9 @@ public class CustomORM{
             return rs.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
+
     }
 
     public static ResultSet getJoinedTables(String firstTable, String foreignTable, String[] colNames, String condition){
@@ -101,6 +102,7 @@ public class CustomORM{
 
     // delete row
     public static ResultSet deleteRow(String tableName, int id){
+
         ResultSet rs = null;
         try {
             String sql = "SELECT * FROM " + tableName + " WHERE id = " + id + ";";
@@ -114,11 +116,11 @@ public class CustomORM{
             if(count == 1){
                 String query = "DELETE FROM " + tableName + " WHERE id = " + id + " RETURNING *;";
                 return HelperOrm.executeQuery(conn, query);
-                
+
             } else {
                 return null;
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

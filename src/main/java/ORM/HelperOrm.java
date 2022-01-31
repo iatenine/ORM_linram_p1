@@ -100,7 +100,7 @@ public class HelperOrm {
     static String sanitizeName(String s){
         return s.replaceAll(" ", "_").toLowerCase(Locale.ROOT);
     }
-
+    //unit test exist in CustomORMTest
     static void executeStatement(Connection conn, String sql){
         try{
             PreparedStatement st = conn.prepareStatement(sql);
@@ -112,8 +112,8 @@ public class HelperOrm {
             }
         }
     }
-
     // Uncomment when needed, currently drops test coverage below 80%
+    //unit Test exist in CustomOrmTest
     static ResultSet executeQuery(Connection conn, String sql){
         ResultSet rs = null;
         try{
@@ -125,7 +125,6 @@ public class HelperOrm {
                 ORMLogger.logger.error(msg);
             }
         }
-
         return rs;
     }
 }
