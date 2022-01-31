@@ -64,6 +64,10 @@ public class CustomORM{
         return -1;
     }
 
+    public static ResultSet getJoinedTables(String firstTable, String foreignTable, String[] colNames, String condition){
+        return null;
+    }
+
     public static ResultSet getRow(String tableName, int id, String[] colNames){
         StringBuilder sb = new StringBuilder("SELECT ");
         for(String colName : colNames){
@@ -72,6 +76,7 @@ public class CustomORM{
         }
         sb.append("FROM ");
         sb.append(tableName);
+        sb.append(" WHERE id=").append(id);
         return executeQuery(conn, sb.toString());
     }
 
@@ -118,5 +123,23 @@ public class CustomORM{
             e.printStackTrace();
         }
         return rs;
+    }
+
+    // Create Foreign Keys
+    public static void addForeignKey(String tableName, String foreignTable, String newColName){
+        StringBuilder sb = new StringBuilder("ALTER TABLE ").append(tableName);
+        sb.append(" ADD COLUMN ").append(newColName).append(" INT REFERENCES ").append(foreignTable);
+        sb.append("(id)");
+        HelperOrm.executeStatement(conn, sb.toString());
+    }
+
+    public static void create1To1Relationship(){
+
+    }
+    public static void create1ToManyRelationship(){
+
+    }
+    public static void createManyToManyRelationship(){
+
     }
 }

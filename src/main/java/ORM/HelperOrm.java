@@ -79,6 +79,7 @@ public class HelperOrm {
     static Object formatValues(Object obj){
         String[] classNameArr = obj.getClass().getName().split("\\.");
         String className = classNameArr[classNameArr.length-1];
+        if("String".equals(className)) obj = obj.toString().replaceAll("'", "''");
         if("String".equals(className) || "Character".equals(className)) {
             return   "'" + obj + "'";
         }
@@ -87,6 +88,7 @@ public class HelperOrm {
 
 
     static String buildColumn(HashMap<String, Class> columns){
+        if(columns.keySet().size() == 0) return "";
         StringBuilder columnNames = new StringBuilder(",");
         for(String colName : columns.keySet()){
             String sanitizedColName = sanitizeName(colName);
