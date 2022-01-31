@@ -3,7 +3,9 @@ package ORM;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
+import java.util.HashMap;
 
+import static ORM.CustomORM.connect;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HelperOrmTest {
@@ -41,4 +43,27 @@ class HelperOrmTest {
         assertEquals("(default, ?, ?, ?, ?)", defaultStr);
         assertEquals("(?, ?)", noDefaultStr);
     }
+
+
+    @Test
+    void buildColumn(){
+        HashMap<String, Class> testMap = new HashMap<String, Class>();
+        testMap.put("Name", String.class);
+        testMap.put("Age", Integer.class);
+        testMap.put("Alive", Boolean.class);
+        testMap.put("Funds", Float.class);
+
+        String testing = HelperOrm.buildColumn(testMap);
+
+        assertEquals(",alive BOOLEAN, age INTEGER, name VARCHAR(75), funds NUMERIC(10, 2)", testing);
+    }
+
+    @Test
+    void sanitizeTest(){
+        String testString = "T E s T i N g";
+        String after = HelperOrm.sanitizeName(testString);
+        assertEquals("t_e_s_t_i_n_g", after);
+    }
+
+
 }
