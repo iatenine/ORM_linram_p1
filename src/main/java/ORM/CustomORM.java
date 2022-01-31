@@ -1,6 +1,7 @@
 package ORM;
 
 import logging.ORMLogger;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -65,15 +66,18 @@ public class CustomORM{
 
     }
 
+    public static ResultSet getJoinedTables(String firstTable, String foreignTable, String[] colNames, String condition){
+        return null;
+    }
+
     public static ResultSet getRow(String tableName, int id, String[] colNames){
-        StringBuilder sb = new StringBuilder("SELECT ");
-        for(String colName : colNames){
-            sb.append(HelperOrm.sanitizeName(colName));
-            sb.append(" ");
-        }
-        sb.append("FROM ");
-        sb.append(tableName);
-        return executeQuery(conn, sb.toString());
+        String sql = HelperOrm.selectStatementBuilder(tableName, colNames) + " WHERE id=" + id;
+        return executeQuery(conn, sql);
+    }
+
+    public static ResultSet getRows(String tableName, String[] colNames){
+        String sql = HelperOrm.selectStatementBuilder(tableName, colNames);
+        return executeQuery(conn, sql.toString());
     }
 
     // update row
@@ -120,5 +124,23 @@ public class CustomORM{
             e.printStackTrace();
         }
         return rs;
+    }
+
+    // Create Foreign Keys
+    public static void addForeignKey(String tableName, String foreignTable, String newColName){
+        StringBuilder sb = new StringBuilder("ALTER TABLE ").append(tableName);
+        sb.append(" ADD COLUMN ").append(newColName).append(" INT REFERENCES ").append(foreignTable);
+        sb.append("(id)");
+        HelperOrm.executeStatement(conn, sb.toString());
+    }
+
+    public static void create1To1Relationship(){
+
+    }
+    public static void create1ToManyRelationship(){
+
+    }
+    public static void createManyToManyRelationship(){
+
     }
 }
