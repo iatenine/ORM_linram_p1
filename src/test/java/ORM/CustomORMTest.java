@@ -227,7 +227,7 @@ class CustomORMTest {
 
         String[] names = {"*"};
 
-        ResultSet set = CustomORM.join(
+        ResultSet set = CustomORM.getJoin(
                 betterTable,
                 betterTable2,
                 names
