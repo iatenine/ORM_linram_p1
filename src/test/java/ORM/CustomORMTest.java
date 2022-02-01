@@ -239,6 +239,7 @@ class CustomORMTest {
     }
     @Test
     void join() {
+
         HashMap<String, Class> columns = new HashMap<>();
         columns.put("name", String.class);
         columns.put("total", Double.class);
@@ -260,7 +261,7 @@ class CustomORMTest {
 
         String[] names = {"*"};
 
-        ResultSet set = CustomORM.join(
+        ResultSet set = CustomORM.getJoin(
                 betterTable,
                 betterTable2,
                 names

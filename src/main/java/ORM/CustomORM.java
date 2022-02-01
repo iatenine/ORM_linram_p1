@@ -126,22 +126,8 @@ public class CustomORM{
         return rs;
     }
 
-    // Create Foreign Keys
-    public static void addForeignKey(String tableName, String foreignTable, String newColName){
-        StringBuilder sb = new StringBuilder("ALTER TABLE ").append(tableName);
-        sb.append(" ADD COLUMN ").append(newColName).append(" INT REFERENCES ").append(foreignTable);
-        sb.append("(id)");
-        HelperOrm.executeStatement(conn, sb.toString());
-    }
-
-    public static void create1To1Relationship(){
-
-    }
-    public static void create1ToManyRelationship(){
-
-    }
-    public static void createManyToManyRelationship(){
-
+    public static ResultSet getJoin(String tableName1, String tableName2, String[] colNames){
+        return null;
     }
 
     public static ResultSet join(String tableName1, String tableName2, String[] colNames){
@@ -164,10 +150,20 @@ public class CustomORM{
         return executeQuery(conn, sql.toString());
     }
 
-    public static void main(String[] args) {
-        String table1 = "test1";
-        String table2 = "test2";
-        String[] names = {"*"};
-        join(table1, table2, names);
+    // Create Foreign Keys
+    public static void addForeignKey(String tableName, String foreignTable, String newColName){
+        StringBuilder sb = new StringBuilder("ALTER TABLE ").append(tableName);
+        sb.append(" ADD COLUMN ").append(newColName).append(" INT REFERENCES ").append(foreignTable);
+        sb.append("(id)");
+        HelperOrm.executeStatement(conn, sb.toString());
+    }
+
+    public static void create1To1Relationship(){
+
+    }
+    public static void create1ToManyRelationship(){
+
+    }
+    public static void createManyToManyRelationship(){
     }
 }
