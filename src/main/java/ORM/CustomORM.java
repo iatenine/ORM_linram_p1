@@ -143,4 +143,31 @@ public class CustomORM{
     public static void createManyToManyRelationship(){
 
     }
+
+    public static ResultSet join(String tableName1, String tableName2, String[] colNames){
+
+        StringBuilder sql = new StringBuilder("Select ");
+        for(int i = 0; i < colNames.length; i ++) {
+            sql.append(HelperOrm.sanitizeName(colNames[i]));
+            if(i == colNames.length-1){
+                sql.append(" ");
+            } else {
+                sql.append(", ");
+            }
+        }
+        sql.append("From ");
+        sql.append(tableName1);
+        sql.append(" Natural Join ");
+        sql.append(tableName2);
+        //System.out.println(sql);
+
+        return executeQuery(conn, sql.toString());
+    }
+
+    public static void main(String[] args) {
+        String table1 = "test1";
+        String table2 = "test2";
+        String[] names = {"*"};
+        join(table1, table2, names);
+    }
 }
