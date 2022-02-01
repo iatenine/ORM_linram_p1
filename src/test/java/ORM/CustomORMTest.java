@@ -94,7 +94,6 @@ class CustomORMTest {
                 "Hank",
                 20
         );
-
         ResultSet rs_full = CustomORM.getRow(tableName, newId, new String[] {"*"});
         ResultSet rs_partial = CustomORM.getRow(tableName, newId, new String[]{"name"});
 
@@ -120,8 +119,43 @@ class CustomORMTest {
             fail();
             ORMLogger.logger.error(i.getStackTrace());
         }
+    }
 
+    @Test
+    void getRows() {
+        CustomORM.addRow(
+                tableName,
+                "Hank",
+                45
+        );
+        CustomORM.addRow(
+                tableName,
+                "Bobby",
+                12
+        );
+        ResultSet rs = CustomORM.getRows(tableName, new String[] {"*"});
 
+        try {
+            // Place both ResultSets on their first response
+            assertNotNull(rs);
+
+            // Get Hank
+            assertTrue(rs.next());
+            String fetchedName = rs.getString(2);
+            int fetchedAge = rs.getInt(3);
+            assertEquals(45, fetchedAge);
+            assertEquals("Hank", fetchedName);
+
+            // Get Bobby
+            assertTrue(rs.next());
+            fetchedName = rs.getString(2);
+            fetchedAge = rs.getInt(3);
+            assertEquals(12, fetchedAge);
+            assertEquals("Bobby", fetchedName);
+            assertFalse(rs.next());
+        } catch (SQLException e) {
+            // Expected exception
+        }
     }
 
     @Test
