@@ -205,6 +205,7 @@ class CustomORMTest {
     }
     @Test
     void join() {
+
         HashMap<String, Class> columns = new HashMap<>();
         columns.put("name", String.class);
         columns.put("total", Double.class);

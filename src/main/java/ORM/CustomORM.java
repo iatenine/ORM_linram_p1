@@ -124,6 +124,7 @@ public class CustomORM{
 
     public static ResultSet join(String tableName1, String tableName2, String[] colNames){
 
+
         StringBuilder sql = new StringBuilder("Select ");
         for(int i = 0; i < colNames.length; i ++) {
             sql.append(HelperOrm.sanitizeName(colNames[i]));
