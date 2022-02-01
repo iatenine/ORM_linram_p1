@@ -122,7 +122,7 @@ public class CustomORM{
         return rs;
     }
 
-    public static ResultSet join(String tableName1, String tableName2, String[] colNames){
+    public static ResultSet getJoin(String tableName1, String tableName2, String[] colNames){
 
 
         StringBuilder sql = new StringBuilder("Select ");
