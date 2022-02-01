@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomORMTest {
 
     String tableName = "temp_table";
+    String tableName2 = "temp_table2";
 
     @BeforeAll
     static void prepare(){
@@ -236,6 +237,40 @@ class CustomORMTest {
         CustomORM.dropTable(tableName);
         assertNull(CustomORM.getRow(tableName, newId, new String[] {"*"}));            // Ensure table has been dropped
     }
+    @Test
+    void join() {
+
+        HashMap<String, Class> columns = new HashMap<>();
+        columns.put("name", String.class);
+        columns.put("total", Double.class);
+        columns.put("date", Long.class);
+
+        HashMap<String, Class> column2 = new HashMap<>();
+        column2.put("name", String.class);
+        column2.put("food", String.class);
+        column2.put("total", String.class);
+
+        String betterTable = CustomORM.buildTable(
+                tableName,
+                columns
+        );
+        String betterTable2 = CustomORM.buildTable(
+                tableName2,
+                column2
+        );
+
+        String[] names = {"*"};
+
+        ResultSet set = CustomORM.getJoin(
+                betterTable,
+                betterTable2,
+                names
+                );
+        assertNotNull(set);
+
+    }
+
+
 
     @Test
     void executeStatementTest(){

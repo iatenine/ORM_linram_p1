@@ -126,6 +126,27 @@ public class CustomORM{
         return rs;
     }
 
+    public static ResultSet getJoin(String tableName1, String tableName2, String[] colNames){
+
+
+        StringBuilder sql = new StringBuilder("Select ");
+        for(int i = 0; i < colNames.length; i ++) {
+            sql.append(HelperOrm.sanitizeName(colNames[i]));
+            if(i == colNames.length-1){
+                sql.append(" ");
+            } else {
+                sql.append(", ");
+            }
+        }
+        sql.append("From ");
+        sql.append(tableName1);
+        sql.append(" Natural Join ");
+        sql.append(tableName2);
+        //System.out.println(sql);
+
+        return executeQuery(conn, sql.toString());
+    }
+
     // Create Foreign Keys
     public static void addForeignKey(String tableName, String foreignTable, String newColName){
         StringBuilder sb = new StringBuilder("ALTER TABLE ").append(tableName);
@@ -141,6 +162,5 @@ public class CustomORM{
 
     }
     public static void createManyToManyRelationship(){
-
     }
 }
