@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 
-import static ORM.CustomORM.connect;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HelperOrmTest {
@@ -47,7 +46,7 @@ class HelperOrmTest {
 
     @Test
     void buildColumn(){
-        HashMap<String, Class> testMap = new HashMap<String, Class>();
+        HashMap<String, Class> testMap = new HashMap<>();
         testMap.put("Name", String.class);
         testMap.put("Age", Integer.class);
         testMap.put("Alive", Boolean.class);

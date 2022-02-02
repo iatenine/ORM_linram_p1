@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 
 import static ORM.HelperOrm.buildColumn;
 import static ORM.HelperOrm.executeQuery;
@@ -77,7 +78,7 @@ public class CustomORM{
 
     public static ResultSet getRows(String tableName, String[] colNames){
         String sql = HelperOrm.selectStatementBuilder(tableName, colNames);
-        return executeQuery(conn, sql.toString());
+        return executeQuery(conn, sql);
     }
 
     // update row
@@ -127,8 +128,6 @@ public class CustomORM{
     }
 
     public static ResultSet getJoin(String tableName1, String tableName2, String[] colNames){
-
-
         StringBuilder sql = new StringBuilder("Select ");
         for(int i = 0; i < colNames.length; i ++) {
             sql.append(HelperOrm.sanitizeName(colNames[i]));
@@ -142,17 +141,16 @@ public class CustomORM{
         sql.append(tableName1);
         sql.append(" Natural Join ");
         sql.append(tableName2);
-        //System.out.println(sql);
 
         return executeQuery(conn, sql.toString());
     }
 
     // Create Foreign Keys
     public static void addForeignKey(String tableName, String foreignTable, String newColName){
-        StringBuilder sb = new StringBuilder("ALTER TABLE ").append(tableName);
-        sb.append(" ADD COLUMN ").append(newColName).append(" INT REFERENCES ").append(foreignTable);
-        sb.append("(id)");
-        HelperOrm.executeStatement(conn, sb.toString());
+        String sb = "ALTER TABLE " + tableName +
+                " ADD COLUMN " + newColName + " INT REFERENCES " + foreignTable +
+                "(id)";
+        HelperOrm.executeStatement(conn, sb);
     }
 
     public static void create1To1Relationship(){
@@ -161,6 +159,43 @@ public class CustomORM{
     public static void create1ToManyRelationship(){
 
     }
-    public static void createManyToManyRelationship(){
+    public static String createManyToManyRelationship(String leftTable, String rightTable){
+        String[] tableNames = getTableNameArray(leftTable, rightTable);
+        String junctionTableName = leftTable + "_" + rightTable;
+        CustomORM.buildTable(junctionTableName, new HashMap<>());
+        for(String tableName : tableNames){
+            CustomORM.addForeignKey(junctionTableName, tableName, tableName + "_id");
+        }
+        return junctionTableName;
+    }
+
+    // Each HashMap should accept the tableName and id that user would like to link
+    public static ResultSet linkRows(HashMap<String, Integer> leftTable, HashMap<String, Integer> rightTable){
+        String[] tableNames = getTableNameArray(leftTable.keySet().toArray()[0].toString(), rightTable.keySet().toArray()[0].toString());
+        String junctionTableName =
+                tableNames[0]
+                        + "_" +
+                        tableNames[1];
+        return linkRows(junctionTableName, leftTable, rightTable);
+    }
+
+    public static ResultSet linkRows(String junctionTableName, HashMap<String, Integer> leftTable, HashMap<String, Integer> rightTable){
+        String[] tableNames = getTableNameArray(
+                leftTable.keySet().toArray()[0].toString(),
+                rightTable.keySet().toArray()[0].toString()
+        );
+        Object entry1 = leftTable.get(tableNames[0]);
+        Object entry2 = rightTable.get(tableNames[1]);
+        int id = CustomORM.addRow(junctionTableName, entry1, entry2);
+        return HelperOrm.executeQuery(conn, "SELECT * FROM " + junctionTableName + " WHERE id=" + id);
+    }
+
+
+    @NotNull
+    private static String[] getTableNameArray(String leftTable, String rightTable) {
+        return new String[]{
+                HelperOrm.sanitizeName(leftTable),
+                HelperOrm.sanitizeName(rightTable)
+        };
     }
 }
