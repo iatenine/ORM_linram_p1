@@ -77,11 +77,12 @@ public class FKTests {
 
     @Test
     void getJoinedTables(){
-        String[] names = {"*"};
+        String[] names = {"name"};
 
-        ResultSet set = CustomORM.getJoin(
+        ResultSet set = CustomORM.join(
                 "owners",
                 "drivers",
+                names,
                 names
         );
         assertNotNull(set);

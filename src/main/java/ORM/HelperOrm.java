@@ -139,4 +139,36 @@ public class HelperOrm {
         }
         return rs;
     }
+
+
+    static String aliases(String alias1, String alias2,String[] firstCol, String[] secondCol){
+
+        StringBuilder format = new StringBuilder("");
+        for(int i = 0; i < firstCol.length; i++){
+            format.append(alias1);
+            format.append(".");
+            format.append(HelperOrm.sanitizeName(firstCol[i]));
+            if(i == firstCol.length-1){
+                format.append(" ");
+            } else {
+                format.append(", ");
+            }
+        }
+        format.append(", ");
+        for(int i = 0; i < secondCol.length; i++){
+            format.append(alias2);
+            format.append(".");
+            format.append(HelperOrm.sanitizeName(secondCol[i]));
+            if(i == secondCol.length-1){
+                format.append(" ");
+            } else {
+                format.append(", ");
+            }
+        }
+
+        return format.toString();
+    }
+
+
+
 }

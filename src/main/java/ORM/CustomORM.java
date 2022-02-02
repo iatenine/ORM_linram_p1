@@ -9,9 +9,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
-import static ORM.HelperOrm.buildColumn;
-import static ORM.HelperOrm.executeQuery;
-import static ORM.HelperOrm.buildValues;
+import static ORM.HelperOrm.*;
 
 public class CustomORM{
 
@@ -129,19 +127,33 @@ public class CustomORM{
     }
 
     public static ResultSet getJoin(String tableName1, String tableName2, String[] colNames){
+        return null;
+    }
+
+    public static ResultSet join(String firstTable, String secondTable, String [] table1, String [] table2 ){
+
+        String alias1 = "t1";
+        String alias2 = "t2";
+
         StringBuilder sql = new StringBuilder("Select ");
-        for(int i = 0; i < colNames.length; i ++) {
-            sql.append(HelperOrm.sanitizeName(colNames[i]));
-            if(i == colNames.length-1){
-                sql.append(" ");
-            } else {
-                sql.append(", ");
-            }
-        }
+
+        sql.append(aliases(alias1,alias2,table1,table2));
         sql.append("From ");
-        sql.append(tableName1);
-        sql.append(" Natural Join ");
-        sql.append(tableName2);
+
+        sql.append(firstTable);
+        sql.append(" As ");
+        sql.append(alias1);
+        sql.append(" Join ");
+        sql.append(secondTable);
+        sql.append(" As ");
+        sql.append(alias2);
+        sql.append(" On ");
+        sql.append(alias1);
+        sql.append(".id");
+        sql.append(" = ");
+        sql.append(alias2);
+        sql.append(".id;");
+
 
         return executeQuery(conn, sql.toString());
     }
@@ -158,6 +170,7 @@ public class CustomORM{
 
     }
     public static void create1ToManyRelationship(){
+
 
     }
     public static String createManyToManyRelationship(String leftTable, String rightTable){
@@ -201,4 +214,6 @@ public class CustomORM{
             HelperOrm.sanitizeName(name)
         ).toArray(String[]::new);
     }
+
+
 }
