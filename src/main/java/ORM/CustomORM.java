@@ -4,6 +4,7 @@ import logging.ORMLogger;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
@@ -179,7 +180,14 @@ public class CustomORM{
         return linkRows(junctionTableName, leftTable, rightTable);
     }
 
-    public static ResultSet linkRows(String junctionTableName, HashMap<String, Integer> leftTable, HashMap<String, Integer> rightTable){
+    public static void foo(HashMap<String, Integer>[] hm){
+        Arrays.stream(hm).sorted();
+    }
+
+    public static ResultSet linkRows(String junctionTableName,
+                                     HashMap<String, Integer> leftTable,
+                                     HashMap<String, Integer> rightTable){
+
         String[] tableNames = getTableNameArray(
                 leftTable.keySet().toArray()[0].toString(),
                 rightTable.keySet().toArray()[0].toString()
@@ -192,10 +200,9 @@ public class CustomORM{
 
 
     @NotNull
-    private static String[] getTableNameArray(String leftTable, String rightTable) {
-        return new String[]{
-                HelperOrm.sanitizeName(leftTable),
-                HelperOrm.sanitizeName(rightTable)
-        };
+    private static String[] getTableNameArray(String ...tableNames) {
+        return Arrays.stream(tableNames).map((name)->
+            HelperOrm.sanitizeName(name)
+        ).toArray(String[]::new);
     }
 }
