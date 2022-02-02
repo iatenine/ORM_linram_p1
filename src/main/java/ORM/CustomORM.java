@@ -180,10 +180,6 @@ public class CustomORM{
         return linkRows(junctionTableName, leftTable, rightTable);
     }
 
-    public static void foo(HashMap<String, Integer>[] hm){
-        Arrays.stream(hm).sorted();
-    }
-
     public static ResultSet linkRows(String junctionTableName,
                                      HashMap<String, Integer> leftTable,
                                      HashMap<String, Integer> rightTable){
