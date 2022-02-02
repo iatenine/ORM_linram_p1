@@ -5,15 +5,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.function.BooleanSupplier;
 
-import static ORM.CustomORM.conn;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomORMTest {
@@ -237,40 +233,6 @@ class CustomORMTest {
         CustomORM.dropTable(tableName);
         assertNull(CustomORM.getRow(tableName, newId, new String[] {"*"}));            // Ensure table has been dropped
     }
-    @Test
-    void join() {
-
-        HashMap<String, Class> columns = new HashMap<>();
-        columns.put("name", String.class);
-        columns.put("total", Double.class);
-        columns.put("date", Long.class);
-
-        HashMap<String, Class> column2 = new HashMap<>();
-        column2.put("name", String.class);
-        column2.put("food", String.class);
-        column2.put("total", String.class);
-
-        String betterTable = CustomORM.buildTable(
-                tableName,
-                columns
-        );
-        String betterTable2 = CustomORM.buildTable(
-                tableName2,
-                column2
-        );
-
-        String[] names = {"*"};
-
-        ResultSet set = CustomORM.getJoin(
-                betterTable,
-                betterTable2,
-                names
-                );
-        assertNotNull(set);
-
-    }
-
-
 
     @Test
     void executeStatementTest(){
