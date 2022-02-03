@@ -140,9 +140,9 @@ public class CustomORM{
                 alias1 +
                 " On " +
                 alias2 +
-                ".id" +
+                "." + fkColName +
                 " = " +
-                alias1 + "." + fkColName;
+                alias1 + ".id";
 
 
         return executeQuery(conn, sql);
