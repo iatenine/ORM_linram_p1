@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Set;
 
 import static ORM.HelperOrm.*;
 
@@ -36,7 +35,7 @@ public class CustomORM{
             }
     }
 
-    public static String buildTable(String tableName, HashMap<String, Class> columns) {
+    public static String createTable(String tableName, HashMap<String, Class> columns) {
         // Protect against errors caused by spaces and eliminate all UPPERCASE..age
         tableName = tableName.replaceAll(" ", "_").toLowerCase(Locale.ROOT);
         String str = buildColumn(columns);
@@ -48,7 +47,7 @@ public class CustomORM{
     }
 
     public static void dropTable(String tableName){
-        String sql = "Drop Table if exists " + tableName + ";";
+        String sql = "Drop Table if exists " + tableName + " CASCADE;";
         HelperOrm.executeStatement(conn, sql);
     }
 
@@ -64,10 +63,6 @@ public class CustomORM{
             return -1;
         }
 
-    }
-
-    public static ResultSet getJoinedTables(String firstTable, String foreignTable, String[] colNames, String condition){
-        return null;
     }
 
     public static ResultSet getRow(String tableName, int id, String[] colNames){
@@ -126,48 +121,54 @@ public class CustomORM{
         return rs;
     }
 
-    public static ResultSet getJoin(String tableName1, String tableName2, String[] colNames){
-        return null;
+    public static ResultSet join(String firstTable, String secondTable){
+        String [] EVERYTHING = {"*"};
+        return join(firstTable, secondTable, secondTable+"_id", EVERYTHING, EVERYTHING);
     }
 
-    public static ResultSet join(String firstTable, String secondTable, String [] table1, String [] table2 ){
-
+    public static ResultSet join(String firstTable, String secondTable, String fkColName, String[] colNames1, String[] colNames2){
         String alias1 = "t1";
         String alias2 = "t2";
-
-        StringBuilder sql = new StringBuilder("Select ");
-
-        sql.append(aliases(alias1,alias2,table1,table2));
-        sql.append("From ");
-
-        sql.append(firstTable);
-        sql.append(" As ");
-        sql.append(alias1);
-        sql.append(" Join ");
-        sql.append(secondTable);
-        sql.append(" As ");
-        sql.append(alias2);
-        sql.append(" On ");
-        sql.append(alias1);
-        sql.append(".id");
-        sql.append(" = ");
-        sql.append(alias2);
-        sql.append(".id;");
+        String sql = "Select " + aliases(alias1, alias2, colNames1, colNames2) +
+                "From " +
+                firstTable +
+                " " +
+                alias2 +
+                " Join " +
+                secondTable +
+                " " +
+                alias1 +
+                " On " +
+                alias2 +
+                ".id" +
+                " = " +
+                alias1 + "." + fkColName;
 
 
-        return executeQuery(conn, sql.toString());
+        return executeQuery(conn, sql);
     }
 
     // Create Foreign Keys
-    public static void addForeignKey(String tableName, String foreignTable, String newColName){
-        String sb = "ALTER TABLE " + tableName +
-                " ADD COLUMN " + newColName + " INT REFERENCES " + foreignTable +
-                "(id)";
-        HelperOrm.executeStatement(conn, sb);
+    public static void addForeignKey(String tableName, String foreignTable){
+        addForeignKey(tableName, foreignTable, foreignTable+"_id");
     }
 
-    public static void create1To1Relationship(){
+    public static void addForeignKey(String tableName, String foreignTable, String newColName){
+        String sql = "ALTER TABLE " + tableName + " "+
+                "ADD COLUMN " + newColName + " INT, "+
+                "ADD FOREIGN KEY (" + newColName +") "+
+                "REFERENCES " + foreignTable + "(id) "+
+                "ON DELETE CASCADE";
+        HelperOrm.executeStatement(conn, sql);
+    }
 
+    public static String[] create1To1Relationship(String tableName1, String tableName2){
+        String[] tableNames = getTableNameArray(tableName1, tableName2);
+        String fkColName1 = tableNames[1]+"_id";
+        String fkColName2 = tableNames[0]+"_id";
+        CustomORM.addForeignKey(tableName1, tableName2, fkColName1);
+        CustomORM.addForeignKey(tableName2, tableName1, fkColName2);
+        return new String[]{fkColName1, fkColName2};
     }
     public static void create1ToManyRelationship(){
 
@@ -176,27 +177,49 @@ public class CustomORM{
     public static String createManyToManyRelationship(String leftTable, String rightTable){
         String[] tableNames = getTableNameArray(leftTable, rightTable);
         String junctionTableName = leftTable + "_" + rightTable;
-        CustomORM.buildTable(junctionTableName, new HashMap<>());
+        CustomORM.createTable(junctionTableName, new HashMap<>());
         for(String tableName : tableNames){
-            CustomORM.addForeignKey(junctionTableName, tableName, tableName + "_id");
+            CustomORM.addForeignKey(junctionTableName, tableName);
         }
         return junctionTableName;
     }
 
+    //linkRows1to1 tableName1, tableName2, fkColumnName, fkColumnName2
+    public static ResultSet linkRows1To1(HashMap<String, Integer> row1,
+                                         HashMap<String, Integer> row2){
+        String tableName1 = HelperOrm.sanitizeName(row1.keySet().toArray()[0].toString());
+        String tableName2 = HelperOrm.sanitizeName(row2.keySet().toArray()[0].toString());
+        int id1 = row1.get(tableName1);
+        int id2 = row2.get(tableName2);
+
+        HashMap<String, Object> hm = new HashMap<>();
+        HashMap<String, Object> hm2 = new HashMap<>();
+        hm.put(tableName2+"_id", id2);
+        hm2.put(tableName1+"_id", id1);
+
+        CustomORM.updateRow(tableName1, id1, hm);
+        CustomORM.updateRow(tableName2, id2, hm2);
+
+
+        return join(tableName1, tableName2);
+    }
+
+
+    //linkRows1toMany tableName1, tableName2, fkColumnName
+
     // Each HashMap should accept the tableName and id that user would like to link
-    public static ResultSet linkRows(HashMap<String, Integer> leftTable, HashMap<String, Integer> rightTable){
+    public static ResultSet linkRowsManyToMany(HashMap<String, Integer> leftTable, HashMap<String, Integer> rightTable){
         String[] tableNames = getTableNameArray(leftTable.keySet().toArray()[0].toString(), rightTable.keySet().toArray()[0].toString());
         String junctionTableName =
                 tableNames[0]
                         + "_" +
                         tableNames[1];
-        return linkRows(junctionTableName, leftTable, rightTable);
+        return linkRowsManyToMany(junctionTableName, leftTable, rightTable);
     }
 
-    public static ResultSet linkRows(String junctionTableName,
-                                     HashMap<String, Integer> leftTable,
-                                     HashMap<String, Integer> rightTable){
-
+    public static ResultSet linkRowsManyToMany(String junctionTableName,
+                                               HashMap<String, Integer> leftTable,
+                                               HashMap<String, Integer> rightTable){
         String[] tableNames = getTableNameArray(
                 leftTable.keySet().toArray()[0].toString(),
                 rightTable.keySet().toArray()[0].toString()
@@ -210,8 +233,7 @@ public class CustomORM{
 
     @NotNull
     private static String[] getTableNameArray(String ...tableNames) {
-        return Arrays.stream(tableNames).map((name)->
-            HelperOrm.sanitizeName(name)
+        return Arrays.stream(tableNames).map(HelperOrm::sanitizeName
         ).toArray(String[]::new);
     }
 
