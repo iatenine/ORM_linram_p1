@@ -5,10 +5,7 @@ import org.junit.jupiter.api.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,9 +35,9 @@ public class FKTests {
         ownerMap.put("name", String.class);
         carMap.put("model", String.class);
 
-        CustomORM.buildTable("owners", ownerMap);
-        CustomORM.buildTable("drivers", driverMap);
-        CustomORM.buildTable("cars", carMap);
+        CustomORM.createTable("owners", ownerMap);
+        CustomORM.createTable("drivers", driverMap);
+        CustomORM.createTable("cars", carMap);
 
         car_ids[0] = CustomORM.addRow("cars", "F-150");
         car_ids[1] = CustomORM.addRow("cars", "Silverado");
@@ -79,16 +76,22 @@ public class FKTests {
     void getJoinedTables(){
         String[] names = {"name"};
 
+        CustomORM.addForeignKey("owners", "drivers");
+
         ResultSet set = CustomORM.join(
                 "owners",
                 "drivers",
+                "drivers_id",
                 names,
-                names
-        );
+                names);
         assertNotNull(set);
         try {
             assertTrue(set.next());
-            String s = set.getString("name");
+            String ownerName = set.getString(1);
+            String driverName = set.getString(2);
+
+            assertEquals("Hank", driverName);
+            assertEquals("Hank Hill", ownerName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -96,7 +99,24 @@ public class FKTests {
 
     @Test
     void create1to1Relationship(){
-        fail();
+        String[] colNames = CustomORM.create1To1Relationship("cars", "drivers");
+
+        HashMap<String, Integer> row1 = new HashMap<>();
+        HashMap<String, Integer> row2 = new HashMap<>();
+
+        row1.put("cars", car_ids[0]);
+        row2.put("drivers", driver_ids[0]);
+
+        ResultSet rs = CustomORM.linkRows1To1(row1, row2);
+        assertNotNull(rs);
+
+        try {
+            assertTrue(rs.next());
+            assertEquals(car_ids[0], rs.getInt("cars_id"));
+            assertEquals(driver_ids[0], rs.getInt("drivers_id"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -118,8 +138,8 @@ public class FKTests {
         otherOwner.put("owners", owner_ids[1]);
 
         // Use linkRows method to simplify linking many-to-many relationship tables
-        ResultSet rs = CustomORM.linkRows(left_row, right_row);
-        ResultSet rs2 = CustomORM.linkRows(left_row, otherOwner);
+        ResultSet rs = CustomORM.linkRowsManyToMany(left_row, right_row);
+        ResultSet rs2 = CustomORM.linkRowsManyToMany(left_row, otherOwner);
 
         assertNotNull(rs);
         assertNotNull(rs2);

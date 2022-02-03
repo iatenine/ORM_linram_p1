@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomORMTest {
 
     String tableName = "temp_table";
-    String tableName2 = "temp_table2";
 
     @BeforeAll
     static void prepare(){
@@ -27,7 +26,7 @@ class CustomORMTest {
         HashMap<String, Class> columns = new HashMap<>();
         columns.put("name", String.class);
         columns.put("age", Byte.class);
-        CustomORM.buildTable(tableName, columns);
+        CustomORM.createTable(tableName, columns);
     }
 
     @AfterEach
@@ -64,7 +63,7 @@ class CustomORMTest {
         columns.put("computer memory", Integer.class);
         columns.put("date_of_birth", Long.class);
 
-        String betterTable = CustomORM.buildTable(
+        String betterTable = CustomORM.createTable(
                 tableName,
                 columns
         );
