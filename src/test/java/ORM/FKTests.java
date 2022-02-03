@@ -86,13 +86,14 @@ public class FKTests {
                 names);
         assertNotNull(set);
         try {
-            assertTrue(set.next());
-            String ownerName = set.getString(1);
-            String driverName = set.getString(2);
-
-            assertEquals("Hank", driverName);
-            assertEquals("Hank Hill", ownerName);
+            assertFalse(set.next());
+//            String ownerName = set.getString(1);
+//            String driverName = set.getString(2);
+//
+//            assertEquals("Hank", driverName);
+//            assertEquals("Hank Hill", ownerName);
         } catch (SQLException e) {
+            fail();
             e.printStackTrace();
         }
     }
