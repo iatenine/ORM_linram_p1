@@ -170,9 +170,11 @@ public class CustomORM{
         CustomORM.addForeignKey(tableName2, tableName1, fkColName2);
         return new String[]{fkColName1, fkColName2};
     }
-    public static void create1ToManyRelationship(){
+    public static String create1ToManyRelationship(String tableName1, String tableName2) {
 
-
+        String fkColName2 = HelperOrm.sanitizeName(tableName1) + "_id";
+        CustomORM.addForeignKey(tableName2,tableName1,fkColName2);
+        return fkColName2;
     }
     public static String createManyToManyRelationship(String leftTable, String rightTable){
         String[] tableNames = getTableNameArray(leftTable, rightTable);
@@ -206,6 +208,21 @@ public class CustomORM{
 
 
     //linkRows1toMany tableName1, tableName2, fkColumnName
+    public static ResultSet linkRows1toMany(HashMap<String, Integer> one,HashMap<String,Integer> many){
+        String oneTable = HelperOrm.sanitizeName(one.keySet().toArray()[0].toString());
+        String manyTable = HelperOrm.sanitizeName(many.keySet().toArray()[0].toString());
+        int id1 = many.get(manyTable);
+
+
+        HashMap<String, Object> hm = new HashMap<>();
+
+        hm.put(oneTable +"_id", id1);
+
+        CustomORM.updateRow(manyTable, id1, hm);
+        return join(manyTable, oneTable);
+
+
+    }
 
     // Each HashMap should accept the tableName and id that user would like to link
     public static ResultSet linkRowsManyToMany(HashMap<String, Integer> leftTable, HashMap<String, Integer> rightTable){
