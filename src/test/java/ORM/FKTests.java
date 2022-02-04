@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import static ORM.CustomORM.create1ToManyRelationship;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FKTests {
@@ -122,7 +123,20 @@ public class FKTests {
 
     @Test
     void create1toManyRelationship(){
-        fail();
+        String colNames = CustomORM.create1ToManyRelationship("owners","cars");
+        HashMap<String, Integer> row = new HashMap<>();
+        HashMap<String, Integer> row2 = new HashMap<>();
+        row.put("owners",1);
+        row2.put("cars",1);
+        ResultSet rs = CustomORM.linkRows1toMany(row,row2);
+        assertNotNull(rs);
+        try{
+            assertTrue(rs.next());
+            assertEquals(1,rs.getInt("owners_id"));
+            assertEquals("Hank Hill",rs.getString("name"));
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Test
