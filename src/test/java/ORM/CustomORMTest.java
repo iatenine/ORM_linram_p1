@@ -18,7 +18,7 @@ class CustomORMTest {
 
     @BeforeAll
     static void prepare(){
-        assertTrue(CustomORM.connect());
+        assertTrue(PepperORM.connect());
     }
 
     @BeforeEach
@@ -26,25 +26,25 @@ class CustomORMTest {
         HashMap<String, Class> columns = new HashMap<>();
         columns.put("name", String.class);
         columns.put("age", Byte.class);
-        CustomORM.createTable(tableName, columns);
+        PepperORM.createTable(tableName, columns);
     }
 
     @AfterEach
     void cleanupDb(){
-        CustomORM.dropTable(tableName);
+        PepperORM.dropTable(tableName);
     }
 
     @Test
     void connect() {
-        assertFalse(CustomORM.connect(
+        assertFalse(PepperORM.connect(
                 "Impossible Endpoint",
                 "Fake username",
                 "bad password"
         ));
         // Will not work without proper setup in resources/connections.properties
-        assertTrue(CustomORM.connect());
+        assertTrue(PepperORM.connect());
         // Ensure using new connections isn't blocked by Object state
-        assertFalse(CustomORM.connect(
+        assertFalse(PepperORM.connect(
                 "Impossible Endpoint",
                 "Fake username",
                 "bad password"
@@ -63,7 +63,7 @@ class CustomORMTest {
         columns.put("computer memory", Integer.class);
         columns.put("date_of_birth", Long.class);
 
-        String betterTable = CustomORM.createTable(
+        String betterTable = PepperORM.createTable(
                 tableName,
                 columns
         );
@@ -72,7 +72,7 @@ class CustomORMTest {
 
     @Test
     void addRow() {
-        int newId = CustomORM.addRow(
+        int newId = PepperORM.addRow(
                 tableName,
                 "Hank",
                 20
@@ -84,13 +84,13 @@ class CustomORMTest {
 
     @Test
     void getRow() {
-        int newId = CustomORM.addRow(
+        int newId = PepperORM.addRow(
                 tableName,
                 "Hank",
                 20
         );
-        ResultSet rs_full = CustomORM.getRow(tableName, newId, new String[] {"*"});
-        ResultSet rs_partial = CustomORM.getRow(tableName, newId, new String[]{"name"});
+        ResultSet rs_full = PepperORM.getRow(tableName, newId, new String[] {"*"});
+        ResultSet rs_partial = PepperORM.getRow(tableName, newId, new String[]{"name"});
 
         try {
             // Place both ResultSets on their first response
@@ -118,17 +118,17 @@ class CustomORMTest {
 
     @Test
     void getRows() {
-        CustomORM.addRow(
+        PepperORM.addRow(
                 tableName,
                 "Hank",
                 45
         );
-        CustomORM.addRow(
+        PepperORM.addRow(
                 tableName,
                 "Bobby",
                 12
         );
-        ResultSet rs = CustomORM.getRows(tableName, new String[] {"*"});
+        ResultSet rs = PepperORM.getRows(tableName, new String[] {"*"});
 
         try {
             // Place both ResultSets on their first response
@@ -155,7 +155,7 @@ class CustomORMTest {
 
     @Test
     void updateRow() {
-        int newId = CustomORM.addRow(
+        int newId = PepperORM.addRow(
                 tableName,
                 "Hank",
                 20
@@ -166,7 +166,7 @@ class CustomORMTest {
         newCols.put("name", "Bobby");
         newCols.put("age", 12);
 
-        ResultSet rs = CustomORM.updateRow(
+        ResultSet rs = PepperORM.updateRow(
                 tableName,
                 newId,
                 newCols
@@ -192,13 +192,13 @@ class CustomORMTest {
 
     @Test
     void deleteRow() {
-        int newId = CustomORM.addRow(
+        int newId = PepperORM.addRow(
                 tableName,
                 "Hank",
                 45
         );
 
-        ResultSet rs = CustomORM.deleteRow(tableName, newId);
+        ResultSet rs = PepperORM.deleteRow(tableName, newId);
         assertNotNull(rs);
         try {
             assertTrue(rs.next());
@@ -209,7 +209,7 @@ class CustomORMTest {
             assertEquals(45, deletedAge);
 
             // Ensure deletion occurred
-            rs = CustomORM.getRow(tableName, newId, new String[] {"*"});
+            rs = PepperORM.getRow(tableName, newId, new String[] {"*"});
             assertNotNull(rs);
 //            assertFalse(rs.next());
         } catch (SQLException e) {
@@ -223,14 +223,14 @@ class CustomORMTest {
 
     @Test
     void dropTable() {
-        int newId = CustomORM.addRow(
+        int newId = PepperORM.addRow(
                 tableName,
                 "Cotton",
                 85
         );
         assertNotEquals(-1, newId);
-        CustomORM.dropTable(tableName);
-        assertNull(CustomORM.getRow(tableName, newId, new String[] {"*"}));            // Ensure table has been dropped
+        PepperORM.dropTable(tableName);
+        assertNull(PepperORM.getRow(tableName, newId, new String[] {"*"}));            // Ensure table has been dropped
     }
 
     @Test
