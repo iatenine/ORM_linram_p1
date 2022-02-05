@@ -1,6 +1,5 @@
 package app;
 
-import ORM.CustomORM;
 import Research.TestInheritance;
 
 import java.lang.reflect.Field;

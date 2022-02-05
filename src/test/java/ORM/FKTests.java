@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import static ORM.CustomORM.create1ToManyRelationship;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FKTests {
@@ -16,7 +15,7 @@ public class FKTests {
     int[] owner_ids = new int[4];
     @BeforeAll
     static void connectDB(){
-        assertTrue(CustomORM.connect());
+        assertTrue(PepperORM.connect());
 
     }
 
@@ -36,36 +35,36 @@ public class FKTests {
         ownerMap.put("name", String.class);
         carMap.put("model", String.class);
 
-        CustomORM.createTable("owners", ownerMap);
-        CustomORM.createTable("drivers", driverMap);
-        CustomORM.createTable("cars", carMap);
+        PepperORM.createTable("owners", ownerMap);
+        PepperORM.createTable("drivers", driverMap);
+        PepperORM.createTable("cars", carMap);
 
-        car_ids[0] = CustomORM.addRow("cars", "F-150");
-        car_ids[1] = CustomORM.addRow("cars", "Silverado");
-        car_ids[2] = CustomORM.addRow("cars", "Fiat 500");
-        car_ids[3] = CustomORM.addRow("cars", "Camry");
+        car_ids[0] = PepperORM.addRow("cars", "F-150");
+        car_ids[1] = PepperORM.addRow("cars", "Silverado");
+        car_ids[2] = PepperORM.addRow("cars", "Fiat 500");
+        car_ids[3] = PepperORM.addRow("cars", "Camry");
 
-        owner_ids[0] = CustomORM.addRow("drivers", "Hank");
-        owner_ids[1] = CustomORM.addRow("drivers", "Bobby");
-        owner_ids[2] = CustomORM.addRow("drivers", "Peggy");
-        owner_ids[3] = CustomORM.addRow("drivers", "Dale");
+        owner_ids[0] = PepperORM.addRow("drivers", "Hank");
+        owner_ids[1] = PepperORM.addRow("drivers", "Bobby");
+        owner_ids[2] = PepperORM.addRow("drivers", "Peggy");
+        owner_ids[3] = PepperORM.addRow("drivers", "Dale");
 
-        driver_ids[0] = CustomORM.addRow("owners", "Hank Hill");
-        driver_ids[1] = CustomORM.addRow("owners", "Capital One");
-        driver_ids[2] = CustomORM.addRow("owners", "Cotton Hill");
-        driver_ids[3] = CustomORM.addRow("owners", "Wyatt's Towing");
+        driver_ids[0] = PepperORM.addRow("owners", "Hank Hill");
+        driver_ids[1] = PepperORM.addRow("owners", "Capital One");
+        driver_ids[2] = PepperORM.addRow("owners", "Cotton Hill");
+        driver_ids[3] = PepperORM.addRow("owners", "Wyatt's Towing");
     }
 
     @Test
     void addForeignKey(){
-        CustomORM.addForeignKey("drivers", "cars", "car_id");
-        ResultSet rs = HelperOrm.executeQuery(CustomORM.conn, """
+        PepperORM.addForeignKey("drivers", "cars", "car_id");
+        ResultSet rs = HelperOrm.executeQuery(PepperORM.conn, """
             SELECT model FROM drivers d
             JOIN cars c on c.id=d.car_id
             """);
         assertNotNull(rs);
         // Test for false positives (SHOULD log an error)
-        rs = HelperOrm.executeQuery(CustomORM.conn, """
+        rs = HelperOrm.executeQuery(PepperORM.conn, """
             SELECT notAColumn FROM drivers d
             JOIN cars c on c.id=d.car_id
             """);
@@ -77,9 +76,9 @@ public class FKTests {
     void getJoinedTables(){
         String[] names = {"name"};
 
-        CustomORM.addForeignKey("owners", "drivers");
+        PepperORM.addForeignKey("owners", "drivers");
 
-        ResultSet set = CustomORM.join(
+        ResultSet set = PepperORM.join(
                 "owners",
                 "drivers",
                 "drivers_id",
@@ -101,7 +100,7 @@ public class FKTests {
 
     @Test
     void create1to1Relationship(){
-        String[] colNames = CustomORM.create1To1Relationship("cars", "drivers");
+        String[] colNames = PepperORM.create1To1Relationship("cars", "drivers");
 
         HashMap<String, Integer> row1 = new HashMap<>();
         HashMap<String, Integer> row2 = new HashMap<>();
@@ -109,7 +108,7 @@ public class FKTests {
         row1.put("cars", car_ids[0]);
         row2.put("drivers", driver_ids[0]);
 
-        ResultSet rs = CustomORM.linkRows1To1(row1, row2);
+        ResultSet rs = PepperORM.linkRows1To1(row1, row2);
         assertNotNull(rs);
 
         try {
@@ -123,16 +122,16 @@ public class FKTests {
 
     @Test
     void create1toManyRelationship(){
-        String colNames = CustomORM.create1ToManyRelationship("owners","cars");
+        String colNames = PepperORM.create1ToManyRelationship("owners","cars");
         HashMap<String, Integer> row = new HashMap<>();
         HashMap<String, Integer> row2 = new HashMap<>();
         row.put("owners",1);
         row2.put("cars",1);
-        ResultSet rs = CustomORM.linkRows1toMany(row,row2);
+        ResultSet rs = PepperORM.linkRows1toMany(row,row2);
         assertNotNull(rs);
         try{
             assertTrue(rs.next());
-            assertEquals(1,rs.getInt("owners_id"));
+            assertEquals(car_ids[0],rs.getInt("owners_id"));
             assertEquals("Hank Hill",rs.getString("name"));
         } catch(SQLException e){
             e.printStackTrace();
@@ -141,7 +140,7 @@ public class FKTests {
 
     @Test
     void manyToManyandLinkRows(){
-        String jTableName = CustomORM.createManyToManyRelationship("cars", "owners");
+        String jTableName = PepperORM.createManyToManyRelationship("cars", "owners");
         assertEquals("cars_owners", jTableName);
         // Try to get a join
         HashMap<String, Integer> left_row = new HashMap<>();
@@ -153,8 +152,8 @@ public class FKTests {
         otherOwner.put("owners", owner_ids[1]);
 
         // Use linkRows method to simplify linking many-to-many relationship tables
-        ResultSet rs = CustomORM.linkRowsManyToMany(left_row, right_row);
-        ResultSet rs2 = CustomORM.linkRowsManyToMany(left_row, otherOwner);
+        ResultSet rs = PepperORM.linkRowsManyToMany(left_row, right_row);
+        ResultSet rs2 = PepperORM.linkRowsManyToMany(left_row, otherOwner);
 
         assertNotNull(rs);
         assertNotNull(rs2);
@@ -178,9 +177,9 @@ public class FKTests {
 
     @AfterEach
     void cleanUpTables(){
-        CustomORM.dropTable("cars_owners");
-        CustomORM.dropTable("owners");
-        CustomORM.dropTable("drivers");
-        CustomORM.dropTable("cars");
+        PepperORM.dropTable("cars_owners");
+        PepperORM.dropTable("owners");
+        PepperORM.dropTable("drivers");
+        PepperORM.dropTable("cars");
     }
 }
