@@ -17,8 +17,12 @@ public class JDBCConnection {
 
         Properties props = new Properties();
         try {
-            props.load(JDBCConnection.class.getClassLoader().getResourceAsStream("connection.properties"));
-            conn = DriverManager.getConnection(props.getProperty("endpoint"), props.getProperty("username"), props.getProperty("password"));
+            if(System.getenv("url") != null && System.getenv("username") !=null && System.getenv("password") !=null)
+                conn = DriverManager.getConnection(System.getenv("endpoint"), System.getenv("username"), System.getenv("password"));
+            else {
+                props.load(JDBCConnection.class.getClassLoader().getResourceAsStream("connection.properties"));
+                conn = DriverManager.getConnection(props.getProperty("endpoint"), props.getProperty("username"), props.getProperty("password"));
+            }
         }
         catch (SQLException | IOException e){
             e.printStackTrace();
